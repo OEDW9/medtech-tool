@@ -3,488 +3,377 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MedTech & Diagnostics Technology Assessment Tool</title>
+<title>MedTech &amp; Diagnostics Technology Assessment Tool</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
-/* ── Reset & base ─────────────────────────────────────────────────────── */
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{font-family:"Calibri","Segoe UI",system-ui,sans-serif;background:#F5F7FA;color:#1C2B3A;-webkit-font-smoothing:antialiased}
-
-/* ── Tokens ───────────────────────────────────────────────────────────── */
-:root{
-  --navy:#1C2B3A;--teal:#0E7C6E;--mid:#3D4F5E;--light:#F5F7FA;--white:#FFFFFF;
-  --border:#C5CAD1;--text-sec:#5A6A77;
-  --cat1-bg:#DDEAF3;--cat1-bd:#2D5A7B;
-  --cat2-bg:#EDE4F5;--cat2-bd:#6B4C8A;
-  --cat3-bg:#DCEEE6;--cat3-bd:#1B6B38;
-  --cat4-bg:#FBF2D8;--cat4-bd:#B8860B;
-  --cat5-bg:#EBEBEB;--cat5-bd:#808080;
-  --cat6-bg:#D4CFC7;--cat6-bd:#6B6560;
-}
-
-/* ── Top nav bar ──────────────────────────────────────────────────────── */
-.site-header{background:var(--navy);padding:0 2rem;height:52px;display:flex;align-items:center;gap:1.5rem;position:sticky;top:0;z-index:100;border-bottom:1px solid #2e4055}
-.site-title{font-family:Georgia,serif;font-size:15px;font-weight:700;color:#fff;white-space:nowrap}
-.site-nav{display:flex;gap:4px;margin-left:auto}
-.nav-btn{background:none;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:13px;color:#9BB4C8;font-family:inherit;transition:background .15s,color .15s;white-space:nowrap}
-.nav-btn:hover{background:rgba(255,255,255,.08);color:#fff}
-.nav-btn.active{background:rgba(255,255,255,.13);color:#fff;font-weight:600}
-
-/* ── Pages ────────────────────────────────────────────────────────────── */
+:root{--navy:#1C2B3A;--teal:#0E7C6E;--border:#C5CAD1;--ts:#5A6A77;--tt:#8A9AAA}
 .page{display:none}.page.active{display:block}
-
-/* ── HOME ─────────────────────────────────────────────────────────────── */
-.home-hero{padding:3rem 2.5rem 2rem;max-width:800px}
-.home-hero h1{font-family:Georgia,serif;font-size:28px;font-weight:700;color:var(--navy);margin-bottom:.6rem;line-height:1.2}
-.home-hero p{font-size:15px;color:var(--text-sec);line-height:1.6;max-width:620px;margin-bottom:1.5rem}
-.how-to{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;font-size:13.5px;color:var(--text-sec);line-height:1.6;max-width:680px;margin:0 2.5rem 2rem}
-.how-to strong{color:var(--navy);font-weight:600}
-.home-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;padding:0 2.5rem 3rem;max-width:940px}
-.hcard{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.25rem;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+/* NAV */
+.snav{background:var(--navy);padding:0 1.5rem;height:50px;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.stit{font-size:13.5px;font-weight:700;color:#fff;white-space:nowrap;margin-right:4px}
+.snav nav{display:flex;gap:3px;margin-left:auto;flex-wrap:wrap}
+.nb{background:none;border:none;padding:6px 11px;border-radius:6px;cursor:pointer;font-size:12px;color:#9BB4C8;font-family:inherit;white-space:nowrap}
+.nb:hover{background:rgba(255,255,255,.08);color:#fff}
+.nb.act{background:rgba(255,255,255,.14);color:#fff;font-weight:600}
+/* LAYOUT */
+.inner{padding:1.5rem 2rem;max-width:1440px}
+.phdr{margin-bottom:1.25rem}
+.phdr h2{font-size:21px;font-weight:700;color:var(--navy);margin-bottom:.3rem}
+.phdr p{font-size:13px;color:var(--ts)}
+/* HOME */
+.hhero{padding:2.5rem 2rem 1.25rem;max-width:760px}
+.hhero h1{font-size:26px;font-weight:700;color:var(--navy);margin-bottom:.5rem;line-height:1.2}
+.hhero p{font-size:14px;color:var(--ts);line-height:1.6;max-width:600px;margin-bottom:1.25rem}
+.howbox{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.85rem 1.1rem;font-size:13px;color:var(--ts);line-height:1.6;max-width:660px;margin:0 2rem 1.75rem}
+.hcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;padding:0 2rem 2.5rem;max-width:900px}
+.hcard{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.1rem;cursor:pointer;transition:border-color .15s,box-shadow .15s}
 .hcard:hover{border-color:#8CAAB8;box-shadow:0 2px 10px rgba(28,43,58,.08)}
-.hcard-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.75rem;font-size:18px}
-.hcard h3{font-size:14.5px;font-weight:600;margin-bottom:.3rem;color:var(--navy)}
-.hcard p{font-size:12.5px;color:var(--text-sec);line-height:1.4}
-
-/* ── Inner page wrapper ───────────────────────────────────────────────── */
-.page-inner{padding:2rem 2.5rem;max-width:1560px}
-.page-header{margin-bottom:1.5rem}
-.page-header h2{font-family:Georgia,serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:.35rem}
-.page-header p{font-size:13.5px;color:var(--text-sec);line-height:1.5}
-
-/* ── Decision tree section ────────────────────────────────────────────── */
-.dt-toggle{display:flex;gap:8px;margin-bottom:1.25rem}
-.dt-toggle-btn{background:#fff;border:1px solid var(--border);border-radius:7px;padding:7px 16px;cursor:pointer;font-size:13px;color:var(--mid);font-family:inherit;transition:background .15s,border-color .15s}
-.dt-toggle-btn:hover{border-color:#8CAAB8}
-.dt-toggle-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
-
-/* Interactive DT */
-.dt-interactive{max-width:640px}
-.dt-path{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.75rem;min-height:22px}
-.dt-crumb{font-size:11px;color:var(--text-sec);background:#fff;border:1px solid var(--border);padding:1px 8px;border-radius:4px}
-.dt-q-box{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:.85rem}
-.dt-q-hint{font-size:12px;color:var(--text-sec);font-style:italic;margin-bottom:.45rem}
-.dt-q-text{font-size:15px;font-weight:600;color:var(--navy);line-height:1.4;margin-bottom:.8rem}
-.dt-opts{display:flex;flex-direction:column;gap:8px}
-.dt-opt{background:#F5F7FA;border:1px solid var(--border);border-radius:7px;padding:10px 16px;cursor:pointer;font-size:14px;text-align:left;color:var(--navy);font-family:inherit;display:flex;align-items:center;gap:8px;transition:border-color .15s,background .15s}
+.hcico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.6rem;font-size:18px}
+.hcard h3{font-size:14px;font-weight:700;margin-bottom:.25rem;color:var(--navy)}
+.hcard p{font-size:12px;color:var(--ts);line-height:1.4}
+/* MODE TOGGLE */
+.mtog{display:flex;gap:6px;margin-bottom:1rem}
+.mtb{background:#fff;border:1px solid var(--border);border-radius:7px;padding:6px 14px;cursor:pointer;font-size:12.5px;color:var(--ts);font-family:inherit}
+.mtb.act{background:var(--navy);color:#fff;border-color:var(--navy)}
+/* DT STEP */
+.dt-hist{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.dt-hitem{opacity:.38}
+.dt-hq{font-size:12.5px;font-weight:500;color:var(--ts);margin-bottom:3px;line-height:1.4}
+.dt-hans{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:2px 10px;border-radius:5px;border:1px solid var(--border);color:var(--ts);background:#fff}
+.dt-curr{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px;max-width:580px}
+.dt-hint{font-size:11.5px;color:var(--tt);font-style:italic;margin-bottom:5px}
+.dt-q{font-size:14.5px;font-weight:700;color:var(--navy);margin-bottom:10px;line-height:1.4}
+.dt-opts{display:flex;flex-direction:column;gap:7px}
+.dt-opt{background:#F5F7FA;border:1px solid var(--border);border-radius:7px;padding:9px 14px;cursor:pointer;font-size:13.5px;text-align:left;color:var(--navy);font-family:inherit;display:flex;align-items:center;gap:8px;transition:border-color .15s,background .15s}
 .dt-opt:hover{border-color:#8CAAB8;background:#EFF4F7}
-.dt-opt.yes-opt:hover{border-color:#1B6B38;background:#DCEEE6}
-.dt-opt.no-opt:hover{border-color:#993333;background:#F5D6D6}
-.dt-result{border-radius:10px;padding:1.25rem;margin-bottom:1rem;border:2px solid transparent}
-.dt-result h3{font-size:16px;font-weight:700;margin-bottom:.4rem}
-.dt-result p{font-size:13px;line-height:1.5;margin-bottom:.5rem;opacity:.85}
-.dt-result .reg-tag{font-size:11px;padding:2px 9px;border-radius:4px;display:inline-block;margin-top:2px;opacity:.75;border:1px solid transparent}
-.dt-action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:.85rem}
-.dt-action{background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.15);border-radius:7px;padding:6px 14px;cursor:pointer;font-size:12.5px;font-family:inherit;color:inherit}
-.dt-action:hover{background:rgba(255,255,255,.95)}
-.dt-restart{background:#fff;border:1px solid var(--border);border-radius:7px;padding:6px 14px;cursor:pointer;font-size:12.5px;color:var(--text-sec);font-family:inherit}
-.dt-restart:hover{background:#F5F7FA}
-
-/* Full tree wrapper */
-.dt-full-wrap{overflow-x:auto;overflow-y:hidden;padding-bottom:12px}
-
-/* ── TRL Roadmap ─────────────────────────────────────────────────────── */
-.rm-wrap{overflow-x:auto}
-.rm-table{border-collapse:separate;border-spacing:2px;font-size:9.5px;table-layout:fixed;min-width:1050px}
-.rm-table th,.rm-table td{padding:5px 6px;vertical-align:top;border-radius:4px}
-.rm-th-phase{text-align:center;font-size:11px;font-weight:600;padding:6px;border-radius:4px;color:#fff}
-.rm-th-trl{text-align:center;font-size:9.5px;font-weight:600;background:#E8ECF0;color:var(--mid);padding:5px 4px}
-.rm-th-trl span{display:block;font-weight:400;font-size:8.5px;color:var(--text-sec);margin-top:1px}
-.rm-row-label{font-size:9.5px;font-weight:600;padding:6px 8px;border-radius:4px;width:110px;vertical-align:middle;line-height:1.3}
-.rm-cell{font-size:8.5px;line-height:1.35;color:var(--text-sec);background:#EEF1F4;width:90px}
-.rm-cell b{display:block;font-size:8.5px;font-weight:600;margin-bottom:2px;color:var(--navy)}
-.rm-cell.freeze{border-left:2px solid #E24B4A;border-radius:0 4px 4px 0}
-.rm-cell.conv{border-left:2px solid #0E7C6E;border-radius:0 4px 4px 0}
-.rm-cell.reg-start{border-left:2px solid #BA7517;border-radius:0 4px 4px 0}
-.rm-ref-row td{font-size:8.5px;font-style:italic;color:var(--text-sec);background:#F8F9FA;padding:4px 6px;border-top:1px solid var(--border)}
-.rm-legend{display:flex;gap:1.25rem;flex-wrap:wrap;margin-top:.75rem;font-size:11.5px;color:var(--text-sec)}
-.rm-leg{display:flex;align-items:center;gap:5px}
-.rm-swatch{width:12px;height:12px;border-radius:2px}
-
-/* ── Checklist ─────────────────────────────────────────────────────────── */
-.cl-scope-note{background:#FFF8E6;border:1px solid #E8C84A;border-radius:8px;padding:.7rem 1rem;font-size:13px;color:#6B5000;margin-bottom:1.25rem}
-.cl-scope-note strong{font-weight:600}
-.cl-info-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.25rem}
-.cl-info-title{font-size:13.5px;font-weight:600;color:var(--navy);margin-bottom:.75rem}
-.cl-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.cl-field-label{font-size:12px;color:var(--text-sec);margin-bottom:3px;display:block}
-.cl-input{width:100%;border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12.5px;color:var(--navy);background:#fff;height:36px;font-family:inherit}
-.cl-input:focus{outline:none;border-color:#8CAAB8}
-.cl-textarea{width:100%;border:1px solid var(--border);border-radius:7px;padding:7px 10px;font-size:12.5px;color:var(--navy);background:#fff;resize:vertical;min-height:58px;font-family:inherit}
-.cl-textarea:focus{outline:none;border-color:#8CAAB8}
-.cl-cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:7px;margin-bottom:1.25rem}
-.cl-cat-btn{border:1.5px solid transparent;border-radius:8px;padding:8px 10px;cursor:pointer;font-size:12px;text-align:left;font-weight:600;font-family:inherit;line-height:1.3;transition:opacity .15s}
-.cl-cat-btn:hover{opacity:.82}
-.cl-cat-btn.sel{box-shadow:0 0 0 2.5px var(--navy)}
-.cl-cat-btn span{display:block;font-weight:400;font-size:11px;margin-top:2px}
-.cl-gate-bar{background:#FDE8E8;border:1px solid #E0A0A0;border-radius:8px;padding:.7rem 1rem;font-size:13px;color:#7A1515;margin-bottom:.75rem}
-.cl-gate-bar strong{font-weight:600}
-.prog-label{font-size:11px;color:var(--text-sec);margin-bottom:3px}
-.prog-track{background:#E0E5EA;border-radius:6px;height:5px;overflow:hidden;margin-bottom:.85rem}
-.prog-fill{height:100%;background:var(--teal);border-radius:6px;transition:width .25s}
-.cl-section{margin-bottom:1rem}
-.cl-sec-h{font-size:13px;font-weight:600;color:var(--navy);padding:5px 0;border-bottom:1px solid var(--border);margin-bottom:.4rem}
-.cl-trl-badge{font-size:10px;font-weight:400;color:var(--text-sec);margin-left:6px;font-style:italic}
-.cl-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #EEF0F2}
-.cl-item:last-child{border:none}
-.cl-cb{width:15px;height:15px;border-radius:3px;flex-shrink:0;margin-top:1px;cursor:pointer;accent-color:var(--navy)}
-.cl-label{font-size:12px;line-height:1.45;color:var(--text-sec)}
-.cl-label.gate{color:#8B1515;font-weight:600}
-.gate-pill{font-size:10px;padding:1px 6px;background:#FDE8E8;color:#8B1515;border-radius:3px;margin-left:5px;vertical-align:middle;white-space:nowrap;border:1px solid #E0A0A0}
-.cl-placeholder{padding:2.5rem 0;text-align:center;color:var(--text-sec);font-size:13px}
-.dl-row{display:flex;gap:10px;align-items:center;margin-bottom:1.25rem}
-.dl-btn{display:flex;align-items:center;gap:6px;background:var(--teal);border:none;border-radius:7px;padding:8px 18px;cursor:pointer;font-size:13px;color:#fff;font-weight:600;font-family:inherit}
-.dl-btn:hover{opacity:.88}
-.dl-btn:disabled{opacity:.5;cursor:wait}
-
-/* ── Definitions ──────────────────────────────────────────────────────── */
-.def-list{max-width:720px}
-.def-item{border-bottom:1px solid var(--border);padding:.8rem 0}
-.def-item:last-child{border:none}
-.def-term{font-size:14px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:8px}
-.def-cat-tag{font-size:11px;font-weight:600;padding:1px 8px;border-radius:4px;font-style:normal}
-.def-body{font-size:13px;color:var(--text-sec);line-height:1.55}
-.def-reg{font-size:11px;color:#8CAAB8;margin-top:3px;font-style:italic}
-
-/* ── Decision tree shared styles (from your HTML) ────────────────────── */
-.tree-wrap{width:100%;padding:0}
-.tree-instructions{color:#6B6560;font-size:13.5px;max-width:640px;margin:0 0 16px;line-height:1.45}
-.stage{position:relative;width:1500px;height:1030px;margin:0 auto;transform-origin:top left}
-.stage svg.lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.node{position:absolute;border-radius:8px;background:#EBEBEB;border:1.5px solid #808080;padding:12px 16px;text-align:center;font-size:14.5px;line-height:1.35;color:#1A1A1A;box-shadow:0 1px 0 rgba(0,0,0,.04)}
-.node .q{font-weight:700}
-.node .sub{display:block;font-style:italic;color:#6B6560;font-weight:400;font-size:12.5px;margin-top:4px}
-.descriptor{position:absolute;background:#FFFFFF;border:1px solid #808080;border-radius:24px;padding:8px 18px;font-size:13px;color:#1A1A1A;text-align:center}
-.descriptor b{font-weight:700}
-.outcome{position:absolute;border-radius:8px;padding:14px 12px 16px;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,.06)}
-.outcome .cat-label{font-size:10px;letter-spacing:.1em;font-weight:700;color:#6B6560;margin-bottom:6px}
-.outcome .cat-name{font-family:Georgia,serif;font-weight:700;font-size:14.5px;line-height:1.2;color:#1A1A1A}
-.outcome .cat-note{display:block;margin-top:8px;font-size:11px;font-style:italic;color:#6B6560;line-height:1.3}
-.outcome.cat1{background:#DDEAF3;border:2px solid #2D5A7B}.outcome.cat1 .cat-name,.outcome.cat1 .cat-label{color:#2D5A7B}
-.outcome.cat1s{background:#FFFFFF;border:2px dashed #2D5A7B}.outcome.cat1s .cat-name,.outcome.cat1s .cat-label{color:#2D5A7B}
-.outcome.cat2{background:#EDE4F5;border:2px solid #6B4C8A}.outcome.cat2 .cat-name,.outcome.cat2 .cat-label{color:#6B4C8A}
-.outcome.cat5{background:#EBEBEB;border:2px solid #808080}.outcome.cat5 .cat-name,.outcome.cat5 .cat-label{color:#808080}
-.outcome.cat3{background:#DCEEE6;border:2px solid #1B6B38}.outcome.cat3 .cat-name,.outcome.cat3 .cat-label{color:#1B6B38}
-.outcome.cat3s{background:#FFFFFF;border:2px dashed #1B6B38}.outcome.cat3s .cat-name,.outcome.cat3s .cat-label{color:#1B6B38}
-.outcome.cat4{background:#FBF2D8;border:2px solid #B8860B}.outcome.cat4 .cat-name,.outcome.cat4 .cat-label{color:#B8860B}
-.outcome.cat4s{background:#FFFFFF;border:2px dashed #B8860B}.outcome.cat4s .cat-name,.outcome.cat4s .cat-label{color:#B8860B}
-.outcome.cat6{background:#D4CFC7;border:2px solid #6B6560}.outcome.cat6 .cat-name,.outcome.cat6 .cat-label{color:#6B6560}
-.interim{position:absolute;background:#FFFFFF;border:1px solid #808080;border-radius:6px;padding:6px 8px;font-size:10.5px;text-align:center;line-height:1.3;color:#1A1A1A}
-.interim b{font-weight:700}
-.pill{position:absolute;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;z-index:2;letter-spacing:.02em}
-.pill.yes{background:#D4EDDA;border:1.5px solid #2A7B5A;color:#1B6B38}
-.pill.no{background:#F5D6D6;border:1.5px solid #993333;color:#993333}
-.stage-shell{overflow-x:auto;overflow-y:hidden;padding-bottom:8px}
+.dt-res{border-radius:10px;padding:14px 16px;margin-bottom:10px;border:1.5px solid transparent;max-width:580px}
+.dt-res h3{font-size:15px;font-weight:700;margin-bottom:4px}
+.dt-res p{font-size:13px;line-height:1.5;margin-bottom:4px;opacity:.85}
+.dt-res .reg{font-size:11.5px;opacity:.7;font-style:italic;display:block;margin-bottom:8px}
+.dt-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.dt-act{background:rgba(255,255,255,.3);border:1px solid rgba(0,0,0,.15);border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12.5px;font-family:inherit}
+.dt-act:hover{background:rgba(255,255,255,.55)}
+.rbtn{background:#fff;border:1px solid var(--border);border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12.5px;color:var(--ts);font-family:inherit;margin-top:4px}
+.rbtn:hover{background:#F5F7FA}
+/* DT FULL DIAGRAM */
+.dt-shell{overflow-x:auto;overflow-y:hidden;border:1px solid var(--border);border-radius:10px;background:#fff;padding-bottom:8px}
+.dt-stage{position:relative;transform-origin:top left}
+/* ROADMAP */
+.rmwrap{overflow:auto;max-height:75vh;border:1px solid var(--border);border-radius:10px;background:#fff}
+.rmt{border-collapse:separate;border-spacing:0;font-size:9.5px;min-width:1150px;table-layout:fixed}
+.rmt th{position:sticky;z-index:10}
+.rmt th.ph{top:0;text-align:center;font-size:11px;font-weight:600;color:#fff;padding:7px 4px;background:#1C2B3A}
+.rmt th.trlh{top:33px;text-align:center;font-size:9.5px;font-weight:600;color:var(--ts);background:#EEF1F4;padding:5px 4px;border-bottom:1px solid var(--border)}
+.rmt th.trlh span{display:block;font-weight:400;font-size:8px;color:var(--tt);margin-top:1px}
+.rmt td.catc{position:sticky;left:0;z-index:9;font-size:9.5px;font-weight:700;padding:6px 8px;vertical-align:middle;line-height:1.3;border-right:1px solid var(--border);width:90px;min-width:90px}
+.rmt td.trkc{position:sticky;left:90px;z-index:9;font-size:8.5px;padding:4px 6px;vertical-align:middle;line-height:1.3;border-right:1px solid var(--border);width:82px;min-width:82px;color:var(--ts)}
+.rmc{font-size:9px;color:var(--ts);background:#EEF1F4;padding:0;vertical-align:top;border:1px solid var(--border);width:96px;min-width:96px;cursor:default}
+.rmc.freeze{border-left:2px solid #E24B4A}
+.rmc.conv{border-left:2px solid #0E7C6E}
+.rmc.rstart{border-left:2px solid #BA7517}
+.rmc.hi{outline:2px solid #185FA5;outline-offset:-1px;background:#DDEAF3!important}
+.rmc:hover{background:#E4EAF0}
+.rmc.hi:hover{background:#C8DBEF!important}
+.rmci{padding:5px 6px}
+.rmct{font-size:9px;font-weight:600;color:#1C2B3A;display:block;line-height:1.3}
+.rmcd{display:none;font-size:8px;color:var(--ts);margin-top:3px;line-height:1.35}
+.rmc:hover .rmcd{display:block}
+.rmref td{font-size:8px;font-style:italic;color:var(--tt);padding:3px 6px;background:#fff;border-top:1px solid var(--border)}
+.rmleg{display:flex;gap:1rem;flex-wrap:wrap;margin-top:8px;font-size:11px;color:var(--ts)}
+.rmlegi{display:flex;align-items:center;gap:5px}
+.rmnote{font-size:12px;color:#185FA5;margin-bottom:8px;padding:6px 10px;background:#DDEAF3;border-radius:7px;display:none}
+/* CHECKLIST */
+.clscope{background:#FFF8E6;border:1px solid #E8C84A;border-radius:8px;padding:.65rem 1rem;font-size:12.5px;color:#6B5000;margin-bottom:1rem}
+.clicard{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem 1.15rem;margin-bottom:1rem}
+.clitit{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:.7rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.fl{font-size:11.5px;color:var(--ts);margin-bottom:3px;display:block}
+.fi{width:100%;border:1px solid var(--border);border-radius:7px;padding:6px 9px;font-size:12.5px;color:var(--navy);background:#fff;height:35px;font-family:inherit}
+.fi:focus{outline:none;border-color:#8CAAB8}
+.fta{width:100%;border:1px solid var(--border);border-radius:7px;padding:6px 9px;font-size:12.5px;color:var(--navy);background:#fff;resize:vertical;min-height:56px;font-family:inherit}
+.fta:focus{outline:none;border-color:#8CAAB8}
+.clgbar{background:#FDE8E8;border:1px solid #E0A0A0;border-radius:8px;padding:.65rem 1rem;font-size:12.5px;color:#7A1515;margin-bottom:.75rem}
+.clsec{margin-bottom:.85rem}
+.clsech{font-size:12.5px;font-weight:700;color:var(--navy);padding:5px 0;border-bottom:1px solid var(--border);margin-bottom:.4rem}
+.cltrlh{font-size:13.5px;font-weight:700;color:var(--navy);padding:.6rem 0 .2rem;margin-top:.6rem;border-top:1.5px solid var(--border)}
+.cltrlg{font-size:11.5px;font-weight:400;color:#8B1515;display:block;margin-top:2px;margin-bottom:5px;line-height:1.4}
+.clitem{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #EEF0F2}
+.clitem:last-child{border:none}
+.clcb{width:15px;height:15px;flex-shrink:0;margin-top:1px;cursor:pointer;accent-color:#185FA5}
+.cllbl{font-size:12px;line-height:1.45;color:var(--ts)}
+.cllbl.gate{color:#8B1515;font-weight:700}
+.gp{font-size:10px;padding:1px 6px;background:#FDE8E8;color:#8B1515;border-radius:3px;margin-left:4px;vertical-align:middle;white-space:nowrap;border:1px solid #E0A0A0}
+.plbl{font-size:11px;color:var(--tt);margin-bottom:3px}
+.ptrack{background:#E0E5EA;border-radius:6px;height:5px;overflow:hidden;margin-bottom:1rem}
+.pfill{height:100%;background:var(--teal);border-radius:6px;transition:width .25s}
+.abtn{background:#185FA5;border:none;border-radius:8px;padding:10px 22px;cursor:pointer;font-size:13.5px;color:#fff;font-weight:700;font-family:inherit;margin-top:.5rem;display:inline-flex;align-items:center;gap:7px}
+.abtn:hover{background:#0F4A8A}
+/* ASSESSMENT */
+.ascard{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-top:1.5rem}
+.astit{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.trlrow{display:flex;align-items:flex-start;gap:12px;margin-bottom:1.1rem}
+.trlbadge{font-size:26px;font-weight:700;padding:10px 20px;border-radius:9px;background:#DDEAF3;color:#185FA5;white-space:nowrap;flex-shrink:0}
+.trldesc{font-size:13px;color:var(--ts);line-height:1.55;padding-top:4px}
+.assch{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:.5rem}
+.assec{margin-bottom:1rem}
+.gitem{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:12px;color:var(--ts);border-bottom:1px solid #EEF0F2}
+.gitem:last-child{border:none}
+.gp2{font-size:10px;padding:1px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0;font-weight:700;margin-top:1px}
+.gp2.bl{background:#FDE8E8;color:#8B1515}
+.gp2.nx{background:#FFF3CD;color:#7A5200}
+.nsitem{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:12px;color:var(--ts)}
+.nsnum{width:20px;height:20px;border-radius:50%;background:#DDEAF3;color:#185FA5;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dlbtn{display:inline-flex;align-items:center;gap:7px;background:var(--teal);border:none;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:13.5px;color:#fff;font-weight:700;font-family:inherit;margin-top:1rem}
+.dlbtn:hover{opacity:.88}
+.dlbtn:disabled{opacity:.5;cursor:wait}
+/* DEFS */
+.defitem{border-bottom:1px solid var(--border);padding:.8rem 0}
+.defitem:last-child{border:none}
+.dterm{font-size:14px;font-weight:700;margin-bottom:3px;display:flex;align-items:center;gap:8px}
+.dctag{font-size:11px;padding:1px 7px;border-radius:4px;font-weight:700}
+.dbody{font-size:13px;color:var(--ts);line-height:1.55}
+.dreg{font-size:11px;color:var(--tt);margin-top:3px;font-style:italic}
 </style>
 </head>
 <body>
 
-<!-- ── Site header ─────────────────────────────────────────────────────── -->
-<header class="site-header">
-  <span class="site-title">MedTech & Diagnostics Assessment Tool</span>
-  <nav class="site-nav">
-    <button class="nav-btn active" onclick="showPage('home',this)">Home</button>
-    <button class="nav-btn" onclick="showPage('dt',this)">Decision tree</button>
-    <button class="nav-btn" onclick="showPage('rm',this)">TRL roadmap</button>
-    <button class="nav-btn" onclick="showPage('cl',this)">TRL checklist & project planner</button>
-    <button class="nav-btn" onclick="showPage('defs',this)">Definitions</button>
+<header class="snav">
+  <span class="stit">MedTech &amp; Diagnostics Assessment Tool</span>
+  <nav>
+    <button class="nb act" onclick="go('home',this)">Home</button>
+    <button class="nb" onclick="go('dt',this)">Decision tree</button>
+    <button class="nb" onclick="go('rm',this)">TRL roadmap</button>
+    <button class="nb" onclick="go('cl',this)">TRL checklist &amp; project planner</button>
+    <button class="nb" onclick="go('defs',this)">Definitions</button>
   </nav>
 </header>
 
-<!-- ══════════════════════════════════════════════════════════
-     HOME
-══════════════════════════════════════════════════════════ -->
-<div id="page-home" class="page active">
-  <div class="home-hero">
-    <h1>MedTech & Diagnostics<br>Technology Assessment Tool</h1>
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="pg-home" class="page active">
+  <div class="hhero">
+    <h1>MedTech &amp; Diagnostics<br>Technology Assessment Tool</h1>
     <p>A structured framework for classifying MedTech and diagnostics technologies under development, mapping their development pathway and assessing Technology Readiness Level (TRL).</p>
   </div>
-  <div class="how-to">
-    <strong>How to use:</strong> Start with the <strong>decision tree</strong> to identify the technology category, then use the <strong>TRL roadmap</strong> to understand the development pathway, and the <strong>TRL checklist</strong> to assess current stage and priority next steps.
-  </div>
-  <div class="home-cards">
-    <div class="hcard" onclick="showPage('dt',null)">
-      <div class="hcard-icon" style="background:#DDEAF3">🌿</div>
-      <h3>Decision tree</h3>
-      <p>Classify your technology into the correct category by answering a series of questions</p>
-    </div>
-    <div class="hcard" onclick="showPage('rm',null)">
-      <div class="hcard-icon" style="background:#DCEEE6">🗺</div>
-      <h3>TRL roadmap</h3>
-      <p>View the full development pathway across TRL 1–9 for each technology category</p>
-    </div>
-    <div class="hcard" onclick="showPage('cl',null)">
-      <div class="hcard-icon" style="background:#FBF2D8">📋</div>
-      <h3>TRL checklist & project planner</h3>
-      <p>Assess current TRL stage and generate a downloadable summary with priority next steps</p>
-    </div>
-    <div class="hcard" onclick="showPage('defs',null)">
-      <div class="hcard-icon" style="background:#EDE4F5">📖</div>
-      <h3>Definitions</h3>
-      <p>Key terms, technology categories and regulatory pathways explained</p>
-    </div>
+  <div class="howbox"><strong>How to use:</strong> Start with the <strong>decision tree</strong> to identify the technology category, then use the <strong>TRL roadmap</strong> to understand the development pathway, and the <strong>TRL checklist</strong> to assess current stage and priority next steps.</div>
+  <div class="hcards">
+    <div class="hcard" onclick="go('dt',null)"><div class="hcico" style="background:#DDEAF3">&#127807;</div><h3>Decision tree</h3><p>Classify your technology into the correct category by answering a series of questions</p></div>
+    <div class="hcard" onclick="go('rm',null)"><div class="hcico" style="background:#DCEEE6">&#128506;</div><h3>TRL roadmap</h3><p>View the full development pathway across TRL 1&ndash;9 for each technology category</p></div>
+    <div class="hcard" onclick="go('cl',null)"><div class="hcico" style="background:#FBF2D8">&#128203;</div><h3>TRL checklist &amp; project planner</h3><p>Assess current TRL stage and generate a downloadable PDF summary with priority next steps</p></div>
+    <div class="hcard" onclick="go('defs',null)"><div class="hcico" style="background:#EDE4F5">&#128214;</div><h3>Definitions</h3><p>Key terms, technology categories and regulatory pathways explained</p></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     DECISION TREE
-══════════════════════════════════════════════════════════ -->
-<div id="page-dt" class="page">
-  <div class="page-inner">
-    <div class="page-header">
-      <h2>Technology classification decision tree</h2>
-      <p>Follow the questions from top to bottom. When you reach a coloured box, that is your technology category.</p>
-    </div>
+<!-- ═══════════════ DECISION TREE ═══════════════ -->
+<div id="pg-dt" class="page">
+<div class="inner">
+  <div class="phdr"><h2>Technology classification decision tree</h2><p>Follow the step-by-step questions, or switch to the full diagram view.</p></div>
+  <div class="mtog">
+    <button class="mtb act" id="mb-step" onclick="switchDT('step')">&#9658; Step-by-step</button>
+    <button class="mtb" id="mb-full" onclick="switchDT('full')">&#128247; Full diagram</button>
+  </div>
 
-    <div class="dt-toggle">
-      <button class="dt-toggle-btn active" id="dt-btn-diagram" onclick="switchDT('diagram')">Full diagram</button>
-      <button class="dt-toggle-btn" id="dt-btn-interactive" onclick="switchDT('interactive')">Step-by-step mode</button>
-    </div>
+  <!-- STEP BY STEP -->
+  <div id="dt-step">
+    <div id="dt-hist" class="dt-hist"></div>
+    <div id="dt-curr"></div>
+    <button class="rbtn" id="dt-rbtn" onclick="dtRestart()" style="display:none">&#8635; Start again</button>
+  </div>
 
-    <!-- FULL DIAGRAM (your provided HTML) -->
-    <div id="dt-diagram">
-      <p class="tree-instructions">Start at the top. Follow the path that matches your technology (based on the end product that it will be developed into to reach the market). When you reach a coloured box, that's your category.</p>
-      <div class="stage-shell">
-        <div class="stage" id="dt-stage">
-          <svg class="lines" viewBox="0 0 1500 1030" preserveAspectRatio="none" aria-hidden="true">
-            <g fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter">
-              <path d="M 800 95 L 800 155"/>
-              <path d="M 1075 65 L 1425 65 L 1425 820"/>
-              <path d="M 525 195 L 80 195 L 80 820"/>
-              <path d="M 800 245 L 800 305"/>
-              <path d="M 800 365 L 800 385"/>
-              <path d="M 400 385 L 1080 385"/>
-              <path d="M 400 385 L 400 395"/>
-              <path d="M 1080 385 L 1080 395"/>
-              <path d="M 400 425 L 400 470"/>
-              <path d="M 400 550 L 400 580"/>
-              <path d="M 290 580 L 520 580"/>
-              <path d="M 290 580 L 290 620"/>
-              <path d="M 520 580 L 520 820"/>
-              <path d="M 290 700 L 290 720"/>
-              <path d="M 220 720 L 370 720"/>
-              <path d="M 220 720 L 220 820"/>
-              <path d="M 370 720 L 370 820"/>
-              <path d="M 1080 425 L 1080 470"/>
-              <path d="M 1080 540 L 1080 565"/>
-              <path d="M 915 565 L 1205 565"/>
-              <path d="M 915 565 L 915 580"/>
-              <path d="M 1205 565 L 1205 580"/>
-              <path d="M 915 615 L 915 625"/>
-              <path d="M 1205 615 L 1205 625"/>
-              <path d="M 915 695 L 915 715"/>
-              <path d="M 845 715 L 985 715"/>
-              <path d="M 845 715 L 845 730"/>
-              <path d="M 985 715 L 985 730"/>
-              <path d="M 845 815 L 845 820"/>
-              <path d="M 985 815 L 985 820"/>
-              <path d="M 1205 695 L 1205 715"/>
-              <path d="M 1135 715 L 1275 715"/>
-              <path d="M 1135 715 L 1135 730"/>
-              <path d="M 1275 715 L 1275 730"/>
-              <path d="M 1135 815 L 1135 820"/>
-              <path d="M 1275 815 L 1275 820"/>
-            </g>
-          </svg>
-          <div class="node" style="left:525px;top:35px;width:550px;height:60px;"><span class="q">Is your invention intended for clinical use or to generate clinically actionable information?</span></div>
-          <span class="pill yes" style="left:800px;top:125px;">Yes</span>
-          <span class="pill no" style="left:1140px;top:65px;">No</span>
-          <div class="node" style="left:525px;top:155px;width:550px;height:90px;"><span class="q">Is the invention a physical device (hardware)?</span><span class="sub">Anything from a blood collection tube to a surgically implantable device</span></div>
-          <span class="pill yes" style="left:460px;top:195px;">Yes</span>
-          <span class="pill no" style="left:800px;top:275px;">No</span>
-          <div class="node" style="left:575px;top:305px;width:450px;height:60px;"><span class="q">Is analysis of a biological sample required?</span></div>
-          <span class="pill no" style="left:400px;top:385px;">No</span>
-          <span class="pill yes" style="left:1200px;top:385px;">Yes</span>
-          <div class="descriptor" style="left:140px;top:395px;width:520px;height:30px;"><b>Analysis of data only</b> — no new physical biological sample is being analysed</div>
-          <div class="node" style="left:200px;top:470px;width:400px;height:80px;"><span class="q">Is the output intended to directly inform diagnosis, prognosis, or treatment decisions?</span><span class="sub">i.e. without further clinical interpretation</span></div>
-          <span class="pill yes" style="left:290px;top:600px;">Yes</span>
-          <span class="pill no" style="left:507px;top:600px;">No</span>
-          <div class="node" style="left:150px;top:620px;width:280px;height:80px;"><span class="q">Does the software operate independently of specific hardware?</span></div>
-          <span class="pill no" style="left:212px;top:740px;">No</span>
-          <span class="pill yes" style="left:362px;top:740px;">Yes</span>
-          <div class="descriptor" style="left:740px;top:395px;width:680px;height:30px;">A <b>biomarker, analyte or signature</b> where data is generated by analysis of a physical biological sample</div>
-          <div class="node" style="left:855px;top:470px;width:450px;height:70px;"><span class="q">Can the biomarker be measured using an existing validated platform?</span></div>
-          <span class="pill yes" style="left:915px;top:565px;">Yes</span>
-          <span class="pill no" style="left:1205px;top:565px;">No</span>
-          <div class="interim" style="left:795px;top:580px;width:240px;height:35px;">(Assay reagents or probes may be novel)</div>
-          <div class="interim" style="left:1080px;top:580px;width:250px;height:35px;">New analytical hardware must be developed</div>
-          <div class="node" style="left:775px;top:625px;width:280px;height:70px;"><span class="q">Is algorithmic/computational interpretation required beyond standard instrument output?</span></div>
-          <span class="pill no" style="left:845px;top:715px;">No</span>
-          <span class="pill yes" style="left:985px;top:715px;">Yes</span>
-          <div class="node" style="left:1065px;top:625px;width:280px;height:70px;"><span class="q">Is algorithmic/computational interpretation required beyond standard instrument output?</span></div>
-          <span class="pill no" style="left:1135px;top:715px;">No</span>
-          <span class="pill yes" style="left:1275px;top:715px;">Yes</span>
-          <div class="interim" style="left:780px;top:730px;width:130px;height:85px;">Result is a <b>direct readout</b> — no interpretive software needed</div>
-          <div class="interim" style="left:920px;top:730px;width:130px;height:85px;">Requires a <b>computational tool, algorithm, or classifier</b> to produce a clinical result</div>
-          <div class="interim" style="left:1070px;top:730px;width:130px;height:85px;">Result is a <b>direct readout</b> — no interpretive software needed</div>
-          <div class="interim" style="left:1210px;top:730px;width:130px;height:85px;">Requires a <b>computational tool, algorithm, or classifier</b> to produce a clinical result</div>
-          <div class="outcome cat1" style="left:15px;top:820px;width:130px;height:195px;"><div class="cat-label">CATEGORY 1</div><div class="cat-name">Medical Device</div></div>
-          <div class="outcome cat1s" style="left:155px;top:820px;width:130px;height:195px;"><div class="cat-label">CATEGORY 1s</div><div class="cat-name">Embedded Medical Device Software</div></div>
-          <div class="outcome cat2" style="left:305px;top:820px;width:130px;height:195px;"><div class="cat-label">CATEGORY 2</div><div class="cat-name">Software as a Medical Device</div><span class="cat-note">Regulated standalone software</span></div>
-          <div class="outcome cat5" style="left:455px;top:820px;width:130px;height:195px;"><div class="cat-label">CATEGORY 5</div><div class="cat-name">Other Software</div><span class="cat-note">Not regulated under IVD or Medical Device regulations e.g. Clinical decision support tools</span></div>
-          <div class="outcome cat3" style="left:780px;top:820px;width:130px;height:195px;"><div class="cat-label">CATEGORY 3</div><div class="cat-name">Biomarker + Validated Platform</div></div>
-          <div class="outcome cat3s" style="left:920px;top:820px;width:130px;height:195px;"><div class="cat-label">CATEGORY 3s</div><div class="cat-name">Biomarker + Validated Platform + Software</div></div>
-          <div class="outcome cat4" style="left:1070px;top:820px;width:130px;height:195px;"><div class="cat-label">CATEGORY 4</div><div class="cat-name">Biomarker + Novel Platform</div></div>
-          <div class="outcome cat4s" style="left:1210px;top:820px;width:130px;height:195px;"><div class="cat-label">CATEGORY 4s</div><div class="cat-name">Biomarker + Novel Platform + Software</div></div>
-          <div class="outcome cat6" style="left:1360px;top:820px;width:130px;height:195px;"><div class="cat-label">CATEGORY 6</div><div class="cat-name">Non-Clinical</div><span class="cat-note">No direct clinical application e.g. research tools</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- INTERACTIVE MODE -->
-    <div id="dt-interactive" style="display:none">
-      <div class="dt-interactive">
-        <div class="dt-path" id="dt-path"></div>
-        <div id="dt-body"></div>
+  <!-- FULL DIAGRAM -->
+  <div id="dt-full" style="display:none">
+    <p style="font-size:12px;color:var(--tt);margin-bottom:8px;font-style:italic">Follow the arrows from top to bottom. When you reach a coloured box, that is your category. Scroll right if needed.</p>
+    <div class="dt-shell">
+      <div class="dt-stage" id="dt-stage" style="width:1500px;height:1030px">
+        <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none" viewBox="0 0 1500 1030" preserveAspectRatio="none" aria-hidden="true">
+          <g fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="square">
+            <path d="M800 95L800 155"/><path d="M1075 65L1425 65L1425 820"/>
+            <path d="M525 195L80 195L80 820"/><path d="M800 245L800 305"/>
+            <path d="M800 365L800 385"/><path d="M400 385L1080 385"/>
+            <path d="M400 385L400 395"/><path d="M1080 385L1080 395"/>
+            <path d="M400 425L400 470"/><path d="M400 550L400 580"/>
+            <path d="M290 580L520 580"/><path d="M290 580L290 620"/>
+            <path d="M520 580L520 820"/><path d="M290 700L290 720"/>
+            <path d="M220 720L370 720"/><path d="M220 720L220 820"/><path d="M370 720L370 820"/>
+            <path d="M1080 425L1080 470"/><path d="M1080 540L1080 565"/>
+            <path d="M915 565L1205 565"/><path d="M915 565L915 580"/><path d="M1205 565L1205 580"/>
+            <path d="M915 615L915 625"/><path d="M1205 615L1205 625"/>
+            <path d="M915 695L915 715"/><path d="M845 715L985 715"/>
+            <path d="M845 715L845 730"/><path d="M985 715L985 730"/>
+            <path d="M845 815L845 820"/><path d="M985 815L985 820"/>
+            <path d="M1205 695L1205 715"/><path d="M1135 715L1275 715"/>
+            <path d="M1135 715L1135 730"/><path d="M1275 715L1275 730"/>
+            <path d="M1135 815L1135 820"/><path d="M1275 815L1275 820"/>
+          </g>
+        </svg>
+        <!-- Questions -->
+        <div style="position:absolute;left:525px;top:35px;width:550px;height:60px;border-radius:8px;background:#EBEBEB;border:1.5px solid #808080;padding:12px 16px;text-align:center;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center">Is your invention intended for clinical use or to generate clinically actionable information?</div>
+        <span style="position:absolute;left:800px;top:125px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#D4EDDA;border:1.5px solid #2A7B5A;color:#1B6B38;z-index:2">Yes</span>
+        <span style="position:absolute;left:1140px;top:65px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#F5D6D6;border:1.5px solid #993333;color:#993333;z-index:2">No</span>
+        <div style="position:absolute;left:525px;top:155px;width:550px;height:90px;border-radius:8px;background:#EBEBEB;border:1.5px solid #808080;padding:12px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px"><span style="font-size:13.5px;font-weight:700">Is the invention a physical device (hardware)?</span><span style="font-size:11px;font-style:italic;color:#6B6560">Anything from a blood collection tube to a surgically implantable device</span></div>
+        <span style="position:absolute;left:460px;top:195px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#D4EDDA;border:1.5px solid #2A7B5A;color:#1B6B38;z-index:2">Yes</span>
+        <span style="position:absolute;left:800px;top:275px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#F5D6D6;border:1.5px solid #993333;color:#993333;z-index:2">No</span>
+        <div style="position:absolute;left:575px;top:305px;width:450px;height:60px;border-radius:8px;background:#EBEBEB;border:1.5px solid #808080;padding:12px 16px;text-align:center;font-size:13.5px;font-weight:700;display:flex;align-items:center;justify-content:center">Is analysis of a biological sample required?</div>
+        <span style="position:absolute;left:400px;top:385px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#F5D6D6;border:1.5px solid #993333;color:#993333;z-index:2">No</span>
+        <span style="position:absolute;left:1200px;top:385px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#D4EDDA;border:1.5px solid #2A7B5A;color:#1B6B38;z-index:2">Yes</span>
+        <div style="position:absolute;left:140px;top:395px;width:520px;height:30px;border-radius:20px;background:#fff;border:1px solid #808080;padding:6px 18px;font-size:12px;display:flex;align-items:center;justify-content:center;text-align:center"><strong>Analysis of data only</strong>&nbsp;&mdash; no new physical biological sample is being analysed</div>
+        <div style="position:absolute;left:200px;top:470px;width:400px;height:80px;border-radius:8px;background:#EBEBEB;border:1.5px solid #808080;padding:10px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px"><span style="font-size:13px;font-weight:700">Is the output intended to directly inform diagnosis, prognosis, or treatment decisions?</span><span style="font-size:11px;font-style:italic;color:#6B6560">i.e. without further clinical interpretation</span></div>
+        <span style="position:absolute;left:290px;top:600px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#D4EDDA;border:1.5px solid #2A7B5A;color:#1B6B38;z-index:2">Yes</span>
+        <span style="position:absolute;left:507px;top:600px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#F5D6D6;border:1.5px solid #993333;color:#993333;z-index:2">No</span>
+        <div style="position:absolute;left:150px;top:620px;width:280px;height:80px;border-radius:8px;background:#EBEBEB;border:1.5px solid #808080;padding:10px 14px;text-align:center;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">Does the software operate independently of specific hardware?</div>
+        <span style="position:absolute;left:212px;top:740px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#F5D6D6;border:1.5px solid #993333;color:#993333;z-index:2">No</span>
+        <span style="position:absolute;left:362px;top:740px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#D4EDDA;border:1.5px solid #2A7B5A;color:#1B6B38;z-index:2">Yes</span>
+        <div style="position:absolute;left:740px;top:395px;width:680px;height:30px;border-radius:20px;background:#fff;border:1px solid #808080;padding:6px 18px;font-size:12px;display:flex;align-items:center;justify-content:center;text-align:center">A <strong>&nbsp;biomarker, analyte or signature&nbsp;</strong> where data is generated by analysis of a physical biological sample</div>
+        <div style="position:absolute;left:855px;top:470px;width:450px;height:70px;border-radius:8px;background:#EBEBEB;border:1.5px solid #808080;padding:10px 16px;text-align:center;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">Can the biomarker be measured using an existing validated platform?</div>
+        <span style="position:absolute;left:915px;top:565px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#D4EDDA;border:1.5px solid #2A7B5A;color:#1B6B38;z-index:2">Yes</span>
+        <span style="position:absolute;left:1205px;top:565px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#F5D6D6;border:1.5px solid #993333;color:#993333;z-index:2">No</span>
+        <div style="position:absolute;left:795px;top:580px;width:240px;height:35px;background:#fff;border:1px solid #808080;border-radius:6px;padding:6px 8px;font-size:10.5px;text-align:center;display:flex;align-items:center;justify-content:center">(Assay reagents or probes may be novel)</div>
+        <div style="position:absolute;left:1080px;top:580px;width:250px;height:35px;background:#fff;border:1px solid #808080;border-radius:6px;padding:6px 8px;font-size:10.5px;text-align:center;display:flex;align-items:center;justify-content:center">New analytical hardware must be developed</div>
+        <div style="position:absolute;left:775px;top:625px;width:280px;height:70px;border-radius:8px;background:#EBEBEB;border:1.5px solid #808080;padding:10px 14px;text-align:center;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">Is algorithmic/computational interpretation required beyond standard instrument output?</div>
+        <span style="position:absolute;left:845px;top:715px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#F5D6D6;border:1.5px solid #993333;color:#993333;z-index:2">No</span>
+        <span style="position:absolute;left:985px;top:715px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#D4EDDA;border:1.5px solid #2A7B5A;color:#1B6B38;z-index:2">Yes</span>
+        <div style="position:absolute;left:1065px;top:625px;width:280px;height:70px;border-radius:8px;background:#EBEBEB;border:1.5px solid #808080;padding:10px 14px;text-align:center;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center">Is algorithmic/computational interpretation required beyond standard instrument output?</div>
+        <span style="position:absolute;left:1135px;top:715px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#F5D6D6;border:1.5px solid #993333;color:#993333;z-index:2">No</span>
+        <span style="position:absolute;left:1275px;top:715px;transform:translate(-50%,-50%);padding:3px 14px;border-radius:999px;font-size:12px;font-weight:700;background:#D4EDDA;border:1.5px solid #2A7B5A;color:#1B6B38;z-index:2">Yes</span>
+        <div style="position:absolute;left:780px;top:730px;width:130px;height:85px;background:#fff;border:1px solid #808080;border-radius:6px;padding:6px 8px;font-size:10px;text-align:center;line-height:1.35">Result is a <strong>direct readout</strong> &mdash; no interpretive software needed</div>
+        <div style="position:absolute;left:920px;top:730px;width:130px;height:85px;background:#fff;border:1px solid #808080;border-radius:6px;padding:6px 8px;font-size:10px;text-align:center;line-height:1.35">Requires a <strong>computational tool, algorithm, or classifier</strong> to produce a clinical result</div>
+        <div style="position:absolute;left:1070px;top:730px;width:130px;height:85px;background:#fff;border:1px solid #808080;border-radius:6px;padding:6px 8px;font-size:10px;text-align:center;line-height:1.35">Result is a <strong>direct readout</strong> &mdash; no interpretive software needed</div>
+        <div style="position:absolute;left:1210px;top:730px;width:130px;height:85px;background:#fff;border:1px solid #808080;border-radius:6px;padding:6px 8px;font-size:10px;text-align:center;line-height:1.35">Requires a <strong>computational tool, algorithm, or classifier</strong> to produce a clinical result</div>
+        <!-- Category outcome boxes -->
+        <div style="position:absolute;left:15px;top:820px;width:130px;height:195px;border-radius:8px;background:#DDEAF3;border:2px solid #2D5A7B;padding:14px 12px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#2D5A7B;margin-bottom:6px;letter-spacing:.08em">CATEGORY 1</div><div style="font-family:Georgia,serif;font-weight:700;font-size:14px;color:#2D5A7B;line-height:1.2">Medical Device</div></div>
+        <div style="position:absolute;left:155px;top:820px;width:130px;height:195px;border-radius:8px;background:#fff;border:2px dashed #2D5A7B;padding:14px 12px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#2D5A7B;margin-bottom:6px;letter-spacing:.08em">CATEGORY 1s</div><div style="font-family:Georgia,serif;font-weight:700;font-size:13px;color:#2D5A7B;line-height:1.2">Embedded Medical Device Software</div></div>
+        <div style="position:absolute;left:305px;top:820px;width:130px;height:195px;border-radius:8px;background:#EDE4F5;border:2px solid #6B4C8A;padding:14px 12px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#6B4C8A;margin-bottom:6px;letter-spacing:.08em">CATEGORY 2</div><div style="font-family:Georgia,serif;font-weight:700;font-size:13px;color:#6B4C8A;line-height:1.2">Software as a Medical Device</div><span style="font-size:10px;font-style:italic;color:#6B4C8A;opacity:.8;margin-top:8px;display:block">Regulated standalone software</span></div>
+        <div style="position:absolute;left:455px;top:820px;width:130px;height:195px;border-radius:8px;background:#EBEBEB;border:2px solid #808080;padding:14px 12px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#808080;margin-bottom:6px;letter-spacing:.08em">CATEGORY 5</div><div style="font-family:Georgia,serif;font-weight:700;font-size:13px;color:#808080;line-height:1.2">Other Software</div><span style="font-size:10px;font-style:italic;color:#808080;opacity:.8;margin-top:8px;display:block">Not regulated under IVD or Medical Device regulations e.g. clinical decision support tools</span></div>
+        <div style="position:absolute;left:780px;top:820px;width:130px;height:195px;border-radius:8px;background:#DCEEE6;border:2px solid #1B6B38;padding:14px 12px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#1B6B38;margin-bottom:6px;letter-spacing:.08em">CATEGORY 3</div><div style="font-family:Georgia,serif;font-weight:700;font-size:14px;color:#1B6B38;line-height:1.2">Biomarker + Validated Platform</div></div>
+        <div style="position:absolute;left:920px;top:820px;width:130px;height:195px;border-radius:8px;background:#fff;border:2px dashed #1B6B38;padding:14px 12px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#1B6B38;margin-bottom:6px;letter-spacing:.08em">CATEGORY 3s</div><div style="font-family:Georgia,serif;font-weight:700;font-size:13px;color:#1B6B38;line-height:1.2">Biomarker + Validated Platform + Software</div></div>
+        <div style="position:absolute;left:1070px;top:820px;width:130px;height:195px;border-radius:8px;background:#FBF2D8;border:2px solid #B8860B;padding:14px 12px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#B8860B;margin-bottom:6px;letter-spacing:.08em">CATEGORY 4</div><div style="font-family:Georgia,serif;font-weight:700;font-size:14px;color:#B8860B;line-height:1.2">Biomarker + Novel Platform</div></div>
+        <div style="position:absolute;left:1210px;top:820px;width:130px;height:195px;border-radius:8px;background:#fff;border:2px dashed #B8860B;padding:14px 12px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#B8860B;margin-bottom:6px;letter-spacing:.08em">CATEGORY 4s</div><div style="font-family:Georgia,serif;font-weight:700;font-size:13px;color:#B8860B;line-height:1.2">Biomarker + Novel Platform + Software</div></div>
+        <div style="position:absolute;left:1360px;top:820px;width:130px;height:195px;border-radius:8px;background:#D4CFC7;border:2px solid #6B6560;padding:14px 12px;text-align:center"><div style="font-size:9.5px;font-weight:700;color:#6B6560;margin-bottom:6px;letter-spacing:.08em">CATEGORY 6</div><div style="font-family:Georgia,serif;font-weight:700;font-size:13px;color:#6B6560;line-height:1.2">Non-Clinical</div><span style="font-size:10px;font-style:italic;color:#6B6560;opacity:.8;margin-top:8px;display:block">No direct clinical application e.g. research tools</span></div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- ══════════════════════════════════════════════════════════
-     TRL ROADMAP
-══════════════════════════════════════════════════════════ -->
-<div id="page-rm" class="page">
-  <div class="page-inner">
-    <div class="page-header">
-      <h2>TRL roadmap</h2>
-      <p>Development pathway across TRL 1–9 for each technology category. Scroll right to see all columns.</p>
-    </div>
-    <div class="rm-wrap"><table class="rm-table" id="rm-table"></table></div>
-    <div class="rm-legend">
-      <div class="rm-leg"><div class="rm-swatch" style="border-left:2px solid #BA7517;background:#EEF1F4"></div>Regulated activity begins (TRL 3)</div>
-      <div class="rm-leg"><div class="rm-swatch" style="border-left:2px solid #E24B4A;background:#EEF1F4"></div>Design / method / algorithm freeze</div>
-      <div class="rm-leg"><div class="rm-swatch" style="border-left:2px solid #0E7C6E;background:#EEF1F4"></div>Track convergence</div>
-    </div>
-  </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════
-     TRL CHECKLIST & PROJECT PLANNER
-══════════════════════════════════════════════════════════ -->
-<div id="page-cl" class="page">
-  <div class="page-inner">
-    <div class="page-header" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem">
-      <div>
-        <h2>TRL checklist & project planner</h2>
-        <p>Select your technology category, complete the checklist, and download a summary PDF.</p>
-      </div>
-      <button class="dl-btn" id="dl-btn" onclick="downloadPDF()">⬇ Download PDF</button>
-    </div>
-    <div class="cl-scope-note"><strong>Scope:</strong> This checklist covers TRL 1–5 (Early Stage) only. For TRL 6–9, refer to the TRL Roadmap and engage regulatory and clinical teams directly.</div>
-
-    <!-- Technology info -->
-    <div class="cl-info-card" id="cl-printable-info">
-      <div class="cl-info-title">Technology information</div>
-      <div class="cl-grid-2">
-        <div><label class="cl-field-label">Technology / project name</label><input class="cl-input" id="ft-name" placeholder="e.g. Blood-based CRC biomarker panel"></div>
-        <div><label class="cl-field-label">Technology reference</label><input class="cl-input" id="ft-ref" placeholder="e.g. CR/XXXX-XXX"></div>
-      </div>
-      <div class="cl-grid-2">
-        <div><label class="cl-field-label">Lead researcher / PI</label><input class="cl-input" id="ft-pi" placeholder="Name"></div>
-        <div><label class="cl-field-label">Research institution / university</label><input class="cl-input" id="ft-inst" placeholder="Institution name"></div>
-      </div>
-      <div style="margin-bottom:8px"><label class="cl-field-label">Technology description</label><textarea class="cl-textarea" id="ft-desc" placeholder="Brief description of the technology and scientific approach..."></textarea></div>
-      <div style="margin-bottom:8px"><label class="cl-field-label">Intended use statement</label><textarea class="cl-textarea" id="ft-use" placeholder="e.g. A blood-based IVD test intended to detect colorectal cancer in symptomatic adults as an aid to diagnosis..."></textarea></div>
-      <div style="display:grid;grid-template-columns:160px 1fr;gap:8px">
-        <div><label class="cl-field-label">Date of assessment</label><input class="cl-input" id="ft-date" placeholder="DD/MM/YYYY"></div>
-        <div><label class="cl-field-label">Technology category</label>
-          <select class="cl-input" id="ft-cat" onchange="catFilterChange(this.value)" style="cursor:pointer">
-            <option value="">— Use the decision tree to identify your category, then select here —</option>
-            <option value="cat1">Category 1 — Medical Device</option>
-            <option value="cat1s">Category 1s — Embedded Medical Device Software</option>
-            <option value="cat2">Category 2 — Software as a Medical Device (SaMD)</option>
-            <option value="cat3">Category 3 — Biomarker + Validated Platform</option>
-            <option value="cat3s">Category 3s — Biomarker + Validated Platform + Software</option>
-            <option value="cat4">Category 4 — Biomarker + Novel Platform</option>
-            <option value="cat4s">Category 4s — Biomarker + Novel Platform + Software</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <div id="cl-main" style="display:none">
-      <div id="cl-cat-banner" style="border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;margin-bottom:.75rem"></div>
-      <div class="cl-gate-bar"><strong>⚑ Gating questions</strong> (shown in red) must all be answered YES before a technology can be confirmed at that TRL level. A NO or UNKNOWN answer means the technology has not yet reached that TRL.</div>
-      <div class="prog-label" id="cl-prog-text"></div>
-      <div class="prog-track"><div class="prog-fill" id="cl-prog-fill" style="width:0%"></div></div>
-      <div id="cl-qs"></div>
-    </div>
-    <div id="cl-placeholder" class="cl-placeholder">Select a technology category above to load the relevant checklist questions.</div>
+<!-- ═══════════════ TRL ROADMAP ═══════════════ -->
+<div id="pg-rm" class="page">
+<div class="inner">
+  <div class="phdr"><h2>TRL roadmap</h2><p>Hover any cell to see detail. Headers and category labels stay fixed as you scroll.</p></div>
+  <div id="rm-note" class="rmnote"></div>
+  <div class="rmwrap"><table class="rmt" id="rm-tbl"></table></div>
+  <div class="rmleg">
+    <div class="rmlegi"><div style="width:11px;height:11px;border-left:2px solid #BA7517;background:#EEF1F4"></div>Regulated activity begins (TRL 3)</div>
+    <div class="rmlegi"><div style="width:11px;height:11px;border-left:2px solid #E24B4A;background:#EEF1F4"></div>Design / method / algorithm freeze</div>
+    <div class="rmlegi"><div style="width:11px;height:11px;border-left:2px solid #0E7C6E;background:#EEF1F4"></div>Track convergence</div>
   </div>
 </div>
-
-<!-- ══════════════════════════════════════════════════════════
-     DEFINITIONS
-══════════════════════════════════════════════════════════ -->
-<div id="page-defs" class="page">
-  <div class="page-inner">
-    <div class="page-header">
-      <h2>Definitions & key terms</h2>
-      <p>Technology categories, regulatory standards and key terminology used throughout this tool.</p>
-    </div>
-    <div class="def-list" id="def-list"></div>
-  </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<!-- ═══════════════ CHECKLIST ═══════════════ -->
+<div id="pg-cl" class="page">
+<div class="inner">
+  <div class="phdr"><h2>TRL checklist &amp; project planner</h2><p>Complete the technology information, select your category, answer the checklist questions, then assess your TRL level.</p></div>
+  <div class="clscope"><strong>Scope:</strong> This checklist covers TRL 1&ndash;5 (Early Stage) only. For TRL 6&ndash;9, refer to the TRL Roadmap and engage regulatory and clinical teams directly.</div>
+  <div class="clicard">
+    <div class="clitit">Technology information</div>
+    <div class="g2">
+      <div><label class="fl">Technology / project name</label><input class="fi" id="ft-name" placeholder="e.g. Blood-based CRC biomarker panel"></div>
+      <div><label class="fl">Technology reference</label><input class="fi" id="ft-ref" placeholder="e.g. CR/XXXX-XXX"></div>
+    </div>
+    <div class="g2">
+      <div><label class="fl">Lead researcher / PI</label><input class="fi" id="ft-pi" placeholder="Name"></div>
+      <div><label class="fl">Research institution / university</label><input class="fi" id="ft-inst" placeholder="Institution name"></div>
+    </div>
+    <div style="margin-bottom:8px"><label class="fl">Technology description</label><textarea class="fta" id="ft-desc" placeholder="Brief description of the technology and scientific approach..."></textarea></div>
+    <div style="margin-bottom:8px"><label class="fl">Intended use statement</label><textarea class="fta" id="ft-use" placeholder="e.g. A blood-based IVD test intended to detect colorectal cancer in symptomatic adults as an aid to diagnosis..."></textarea></div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:8px">
+      <div><label class="fl">Date of assessment</label><input class="fi" id="ft-date" placeholder="DD/MM/YYYY"></div>
+      <div><label class="fl">Technology category</label>
+        <select class="fi" id="ft-cat" onchange="catChange(this.value)" style="cursor:pointer">
+          <option value="">&#8212; Use the decision tree then select here &#8212;</option>
+          <option value="cat1">Category 1 &mdash; Medical Device</option>
+          <option value="cat1s">Category 1s &mdash; Embedded Medical Device Software</option>
+          <option value="cat2">Category 2 &mdash; Software as a Medical Device (SaMD)</option>
+          <option value="cat3">Category 3 &mdash; Biomarker + Validated Platform</option>
+          <option value="cat3s">Category 3s &mdash; Biomarker + Validated Platform + Software</option>
+          <option value="cat4">Category 4 &mdash; Biomarker + Novel Platform</option>
+          <option value="cat4s">Category 4s &mdash; Biomarker + Novel Platform + Software</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="cl-main" style="display:none">
+    <div id="cl-banner" style="border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;margin-bottom:.75rem"></div>
+    <div class="clgbar"><strong>&#9873; Gating questions</strong> (shown in red) must all be answered YES before a technology can be confirmed at that TRL level. A NO or UNKNOWN answer means the technology has not yet reached that TRL.</div>
+    <div class="plbl" id="cl-plbl"></div>
+    <div class="ptrack"><div class="pfill" id="cl-pfill" style="width:0%"></div></div>
+    <div id="cl-qs"></div>
+    <button class="abtn" onclick="runAssessment()">&#9654; Assess my TRL level</button>
+    <div id="cl-result" style="display:none" class="ascard">
+      <div class="astit">&#128202; TRL Assessment Result</div>
+      <div id="cl-rc"></div>
+      <button class="dlbtn" id="dl-btn" onclick="downloadPDF()">&#8659; Download PDF summary</button>
+    </div>
+  </div>
+  <div id="cl-placeholder" style="padding:2.5rem 0;text-align:center;color:var(--tt);font-size:13px">Select a technology category above to load the relevant checklist questions.</div>
+</div>
+</div>
+
+<!-- ═══════════════ DEFINITIONS ═══════════════ -->
+<div id="pg-defs" class="page">
+<div class="inner" style="max-width:740px">
+  <div class="phdr"><h2>Definitions &amp; key terms</h2><p>Technology categories, regulatory standards and terminology used throughout this tool.</p></div>
+  <div id="def-list"></div>
+</div>
+</div>
+
 <script>
-/* ══════════════════════════════════════════════════════════
-   NAVIGATION
-══════════════════════════════════════════════════════════ */
-function showPage(id, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  if (btn) btn.classList.add('active');
-  else {
-    document.querySelectorAll('.nav-btn').forEach(b => {
-      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('active');
-    });
-  }
-  if (id === 'rm') buildRM();
-  if (id === 'defs') buildDefs();
+/* ─── Navigation ─── */
+const PGS=['home','dt','rm','cl','defs'];
+function go(id,btn){
+  PGS.forEach(p=>{const e=document.getElementById('pg-'+p);if(e)e.classList.toggle('active',p===id)});
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('act'));
+  if(btn)btn.classList.add('act');
+  else document.querySelectorAll('.nb').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+id+"'"))b.classList.add('act')});
+  if(id==='rm')buildRM();
+  if(id==='defs')buildDefs();
 }
 
-/* ══════════════════════════════════════════════════════════
-   DECISION TREE — diagram scaling + interactive mode
-══════════════════════════════════════════════════════════ */
-function scaleDT() {
-  const stage = document.getElementById('dt-stage');
-  if (!stage) return;
-  const shell = stage.parentElement;
-  const avail = shell.clientWidth;
-  const scale = Math.min(1, avail / 1500);
-  stage.style.transform = 'scale(' + scale + ')';
-  shell.style.height = (1030 * scale + 8) + 'px';
+/* ─── DT diagram scaling ─── */
+function scaleDT(){
+  const s=document.getElementById('dt-stage');if(!s||s.offsetParent===null)return;
+  const sh=s.parentElement;const sc=Math.min(1,sh.clientWidth/1500);
+  s.style.transform='scale('+sc+')';sh.style.height=(1030*sc+8)+'px';
 }
-window.addEventListener('resize', scaleDT);
-window.addEventListener('load', scaleDT);
-setTimeout(scaleDT, 100);
+window.addEventListener('resize',scaleDT);
+window.addEventListener('load',()=>setTimeout(scaleDT,200));
 
-function switchDT(mode) {
-  document.getElementById('dt-diagram').style.display = mode === 'diagram' ? 'block' : 'none';
-  document.getElementById('dt-interactive').style.display = mode === 'interactive' ? 'block' : 'none';
-  document.getElementById('dt-btn-diagram').classList.toggle('active', mode === 'diagram');
-  document.getElementById('dt-btn-interactive').classList.toggle('active', mode === 'interactive');
-  if (mode === 'interactive') { dtNode = DT; dtPath = []; renderDT(); }
-  if (mode === 'diagram') scaleDT();
+function switchDT(m){
+  document.getElementById('dt-step').style.display=m==='step'?'block':'none';
+  document.getElementById('dt-full').style.display=m==='full'?'block':'none';
+  document.getElementById('mb-step').classList.toggle('act',m==='step');
+  document.getElementById('mb-full').classList.toggle('act',m==='full');
+  if(m==='full')setTimeout(scaleDT,80);
 }
 
-/* Interactive decision tree */
-const CATS = {
-  cat1:  { label:'Category 1 — Medical Device', color:'#2D5A7B', bg:'#DDEAF3', border:'#2D5A7B', reg:'MDR 2017/745 / UK MDR 2002', desc:'A physical hardware device intended for clinical use — from a blood collection tube to a surgically implantable device.' },
-  cat1s: { label:'Category 1s — Embedded Medical Device Software', color:'#2D5A7B', bg:'#E8F2FA', border:'#2D5A7B', reg:'MDR 2017/745 + IEC 62304', desc:'Software that operates only within / dependent on a specific hardware device. Device-bound — not standalone SaMD.' },
-  cat2:  { label:'Category 2 — Software as a Medical Device', color:'#6B4C8A', bg:'#EDE4F5', border:'#6B4C8A', reg:'MDSW / SaMD pathway', desc:'Standalone software intended to directly inform clinical diagnosis, prognosis, or treatment decisions.' },
-  cat3:  { label:'Category 3 — Biomarker + Validated Platform', color:'#1B6B38', bg:'#DCEEE6', border:'#1B6B38', reg:'IVDR / FDA 510k', desc:'A novel biomarker measurable using an existing validated analytical platform. No new hardware required.' },
-  cat3s: { label:'Category 3s — Biomarker + Validated Platform + Software', color:'#1B6B38', bg:'#EAF6EF', border:'#1B6B38', reg:'IVD + SaMD dual pathway', desc:'As Category 3, but requiring algorithmic interpretation beyond standard instrument output.' },
-  cat4:  { label:'Category 4 — Biomarker + Novel Platform', color:'#8B6400', bg:'#FBF2D8', border:'#B8860B', reg:'IVDR + MDR (parallel)', desc:'A novel biomarker requiring entirely new analytical hardware. No existing validated platform can perform the measurement.' },
-  cat4s: { label:'Category 4s — Biomarker + Novel Platform + Software', color:'#8B6400', bg:'#FFF8E0', border:'#B8860B', reg:'IVDR + MDR + MDSW (all parallel)', desc:'As Category 4, but also requiring algorithmic interpretation. Most complex regulatory package.' },
+/* ─── Category data ─── */
+const CATS={
+  cat1:{label:'Category 1 \u2014 Medical Device',color:'#2D5A7B',bg:'#DDEAF3',border:'#2D5A7B',reg:'MDR 2017/745 / UK MDR 2002',desc:'A physical hardware device intended for clinical use.'},
+  cat1s:{label:'Category 1s \u2014 Embedded Medical Device Software',color:'#2D5A7B',bg:'#E8F2FA',border:'#2D5A7B',reg:'MDR 2017/745 + IEC 62304',desc:'Software embedded within and dependent on a specific hardware device. Device-bound \u2014 not standalone SaMD.'},
+  cat2:{label:'Category 2 \u2014 Software as a Medical Device',color:'#6B4C8A',bg:'#EDE4F5',border:'#6B4C8A',reg:'MDSW / SaMD pathway',desc:'Standalone software intended to directly inform clinical diagnosis, prognosis, or treatment decisions.'},
+  cat3:{label:'Category 3 \u2014 Biomarker + Validated Platform',color:'#1B6B38',bg:'#DCEEE6',border:'#1B6B38',reg:'IVDR / FDA 510k',desc:'Novel biomarker measurable using an existing validated analytical platform. No new hardware required.'},
+  cat3s:{label:'Category 3s \u2014 Biomarker + Validated Platform + Software',color:'#1B6B38',bg:'#EAF6EF',border:'#1B6B38',reg:'IVD + SaMD dual pathway',desc:'As Category 3, but requiring algorithmic interpretation beyond standard instrument output.'},
+  cat4:{label:'Category 4 \u2014 Biomarker + Novel Platform',color:'#8B6400',bg:'#FBF2D8',border:'#B8860B',reg:'IVDR + MDR (parallel submissions)',desc:'Novel biomarker requiring entirely new analytical hardware.'},
+  cat4s:{label:'Category 4s \u2014 Biomarker + Novel Platform + Software',color:'#8B6400',bg:'#FFF8E0',border:'#B8860B',reg:'IVDR + MDR + MDSW (all parallel)',desc:'As Category 4, plus algorithmic interpretation. Most complex regulatory package.'},
 };
-const DT = {q:'Is your invention intended for clinical use or to generate clinically actionable information?',hint:'Based on the end product it will be developed into to reach the market.',
+
+/* ─── Interactive decision tree with history ─── */
+const DT={q:'Is your invention intended for clinical use or to generate clinically actionable information?',hint:'Based on the end product it will be developed into to reach the market.',
   yes:{q:'Is the invention a physical device (hardware)?',hint:'Anything from a blood collection tube to a surgically implantable device.',
-    yes:{q:'Does the hardware include embedded software integral to its function?',hint:'Software operating only within this specific hardware — device-bound, not standalone.',yes:'cat1s',no:'cat1'},
+    yes:{q:'Does the hardware include embedded software integral to its function?',hint:'Software operating only within this specific hardware \u2014 device-bound, not standalone.',yes:'cat1s',no:'cat1'},
     no:{q:'Is analysis of a biological sample required?',hint:'Does the technology analyse a physical biological sample such as blood, tissue, or urine?',
-      yes:{q:'Can the biomarker be measured using an existing validated platform?',hint:'Assay reagents or probes may be novel — the question is whether the analytical hardware already exists.',
+      yes:{q:'Can the biomarker be measured using an existing validated platform?',hint:'Assay reagents or probes may be novel \u2014 the question is whether the analytical hardware already exists.',
         yes:{q:'Is algorithmic/computational interpretation required beyond standard instrument output?',hint:'Does a classifier or algorithm need to be applied to produce a clinical result?',yes:'cat3s',no:'cat3'},
         no:{q:'Is algorithmic/computational interpretation required beyond standard instrument output?',hint:'New analytical hardware must be developed. Is an interpretive algorithm also needed?',yes:'cat4s',no:'cat4'}},
       no:{q:'Is the output intended to directly inform diagnosis, prognosis, or treatment decisions?',hint:'Without further clinical interpretation.',
@@ -492,175 +381,160 @@ const DT = {q:'Is your invention intended for clinical use or to generate clinic
         no:'cat5'}}},
   no:'cat6'};
 
-let dtNode = DT, dtPath = [];
-function renderDT() {
-  const body = document.getElementById('dt-body');
-  const pathEl = document.getElementById('dt-path');
-  pathEl.innerHTML = dtPath.map(s => `<span class="dt-crumb">${s}</span>`).join('');
-  if (typeof dtNode === 'string') {
-    const special = {
-      cat5:{label:'Category 5 — Other Software',color:'#555',bg:'#EBEBEB',border:'#808080',desc:'Not regulated under IVD or Medical Device regulations (e.g. clinical decision support tools). Not covered by the TRL roadmap.',reg:''},
-      cat6:{label:'Category 6 — Non-Clinical',color:'#555',bg:'#D4CFC7',border:'#6B6560',desc:'No direct clinical application (e.g. research tools). Not covered by the TRL roadmap.',reg:''}
-    };
-    const cat = CATS[dtNode] || special[dtNode];
-    body.innerHTML = `<div class="dt-result" style="background:${cat.bg};border-color:${cat.border}">
-      <h3 style="color:${cat.color}">${cat.label}</h3>
-      <p style="color:${cat.color}bb">${cat.desc}</p>
-      ${cat.reg ? `<div class="reg-tag" style="background:${cat.border}18;color:${cat.color};border-color:${cat.border}44">${cat.reg}</div>` : ''}
-      ${CATS[dtNode] ? `<div class="dt-action-row">
-        <button class="dt-action" onclick="showPage('rm',null)" style="color:${cat.color}">View TRL roadmap →</button>
-        <button class="dt-action" onclick="showPage('cl',null);setTimeout(()=>{document.getElementById('ft-cat').value='${dtNode}';catFilterChange('${dtNode}')},100)" style="color:${cat.color}">Open checklist →</button>
-      </div>` : ''}
-    </div>
-    <button class="dt-restart" onclick="dtNode=DT;dtPath=[];renderDT()">↺ Start again</button>`;
+let dtHist=[],dtNode=DT;
+function dtRestart(){dtHist=[];dtNode=DT;renderDT();}
+
+function renderDT(){
+  const histEl=document.getElementById('dt-hist');
+  const currEl=document.getElementById('dt-curr');
+  const rb=document.getElementById('dt-rbtn');
+  histEl.innerHTML=dtHist.map(h=>`<div class="dt-hitem"><div class="dt-hq">${h.q}</div><div class="dt-hans">${h.a==='yes'?'&#10003; Yes':'&#10007; No'}</div></div>`).join('');
+  rb.style.display=dtHist.length?'inline-block':'none';
+  if(typeof dtNode==='string'){
+    const sp={cat5:{label:'Category 5 \u2014 Other Software',color:'#555',bg:'#EBEBEB',border:'#808080',desc:'Not regulated under IVD or Medical Device regulations. Development pathway not standardised.',reg:''},cat6:{label:'Category 6 \u2014 Non-Clinical',color:'#555',bg:'#D4CFC7',border:'#6B6560',desc:'No direct clinical application (e.g. research tools). Not covered by the TRL roadmap.',reg:''}};
+    const cat=CATS[dtNode]||sp[dtNode];const ck=dtNode;
+    currEl.innerHTML=`<div class="dt-res" style="background:${cat.bg};border-color:${cat.border}"><h3 style="color:${cat.color}">${cat.label}</h3><p style="color:${cat.color}">${cat.desc}</p><span class="reg" style="color:${cat.color}">${cat.reg}</span>${CATS[ck]?`<div class="dt-acts"><button class="dt-act" onclick="hlRM('${ck}')" style="color:${cat.color}">&#128506; View in TRL roadmap</button><button class="dt-act" onclick="openCL('${ck}')" style="color:${cat.color}">&#128203; Open checklist</button></div>`:''}</div>`;
     return;
   }
-  body.innerHTML = `<div class="dt-q-box">
-    <div class="dt-q-hint">${dtNode.hint || ''}</div>
-    <div class="dt-q-text">${dtNode.q}</div>
-    <div class="dt-opts">
-      <button class="dt-opt yes-opt" onclick="dtPath.push('Yes');dtNode=dtNode.yes;renderDT()">✓&nbsp; Yes</button>
-      <button class="dt-opt no-opt" onclick="dtPath.push('No');dtNode=dtNode.no;renderDT()">✗&nbsp; No</button>
-    </div>
-  </div>`;
+  currEl.innerHTML=`<div class="dt-curr"><div class="dt-hint">${dtNode.hint||''}</div><div class="dt-q">${dtNode.q}</div><div class="dt-opts"><button class="dt-opt" onclick="dtAns('yes')">&#10003;&nbsp; Yes</button><button class="dt-opt" onclick="dtAns('no')">&#10007;&nbsp; No</button></div></div>`;
 }
+function dtAns(a){dtHist.push({q:dtNode.q,a});dtNode=dtNode[a];renderDT();}
+function hlRM(ck){
+  go('rm',document.querySelectorAll('.nb')[2]);
+  setTimeout(()=>{
+    document.querySelectorAll('.rmc').forEach(c=>c.classList.toggle('hi',c.dataset.cat===ck));
+    const n=document.getElementById('rm-note');n.textContent='Highlighted: '+(CATS[ck]?CATS[ck].label:'');n.style.display='block';
+  },200);
+}
+function openCL(ck){
+  go('cl',document.querySelectorAll('.nb')[3]);
+  setTimeout(()=>{document.getElementById('ft-cat').value=ck;catChange(ck);},120);
+}
+dtRestart();
 
-/* ══════════════════════════════════════════════════════════
-   TRL ROADMAP
-══════════════════════════════════════════════════════════ */
-const RM_DATA = [
-  {id:'cat1',label:'Cat 1\nMedical Device',sub:'Hardware Track',bg:'#DDEAF3',col:'#2D5A7B',bdr:'#2D5A7B',cells:[
-    {t:'Ideation & feasibility',b:'Feasibility, care pathway & HE analysis'},
-    {t:'HW prototype',b:'Bench prototype, proof of concept, regulatory planning'},
-    {t:'HW design & prototyping',b:'PoC in regulated environment. QMS must be established from this point',cs:'reg-start'},
-    {t:'Design freeze ✦',b:'Mfg V&V planning. DHF & ISO 14971 risk file complete',cs:'freeze'},
-    {t:'Manufacturing V&V',b:'Manufacturing, V&V. Design history file complete'},
-    {t:'PoC in clinical setting',b:'PoC in appropriate clinical setting. Formative usability'},
-    {t:'Usability & HE',b:'Real-world usability. Health economics analysis'},
-    {t:'Clinical performance eval',b:'Clinical performance evaluation. Regulatory submission. Technical File'},
-    {t:'Launch & adoption',b:'Launch, training. Post-market surveillance active'}]},
-  {id:'cat1s',label:'Cat 1s\nEmbedded SW',sub:'HW + Embedded SW Track',bg:'#E8F2FA',col:'#2D5A7B',bdr:'#2D5A7B',cells:[
-    {t:'Clinical need & SW concept',b:'SW device-bound — not standalone SaMD. Intended use identified'},
-    {t:'SW safety classification',b:'IEC 62304 class A/B/C determined. SW architecture & I/O spec drafted'},
-    {t:'SW integration & testing',b:'SW integrated into HW prototype. IEC 62304 plan initiated. QMS established',cs:'reg-start'},
-    {t:'SW V&V planning',b:'SW requirements locked. IEC 62304 design phase. ISO 14971'},
-    {t:'Joint HW + SW freeze ✦',b:'SW V&V complete. Freeze co-ordinated with HW design freeze — cannot be independent',cs:'freeze'},
-    {t:'Integrated device testing',b:'SW performance verified in representative clinical conditions within device'},
-    {t:'Clinical eval incl. SW',b:'Clinical investigation covers embedded SW. SW-specific MDR pre-submission'},
-    {t:'Regulatory approval',b:'CE mark under EU/UK MDR inclusive of embedded SW. FDA covers SW component'},
-    {t:'Deployment & SW maintenance',b:'Device + embedded SW in routine use. Post-market SW monitoring per IEC 62304'}]},
-  {id:'cat2',label:'Cat 2\nSaMD',sub:'Software Track',bg:'#EDE4F5',col:'#6B4C8A',bdr:'#6B4C8A',cells:[
-    {t:'Ideation & feasibility',b:'Clinical need, dataset identified, algorithm concept. Care pathway & HE analysis'},
-    {t:'SW prototype',b:'Prototype algorithm on retrospective data. SW architecture & I/O spec defined'},
-    {t:'SW design & development',b:'SW design in regulated environment. IEC 62304 initiated. QMS established',cs:'reg-start'},
-    {t:'SW design lock & V&V planning',b:'SW requirements locked. V&V planning. Algorithm must NOT be frozen yet'},
-    {t:'SW V&V',b:'SW V&V on retrospective/internal data. IEC 62304 design phase complete'},
-    {t:'Algorithm freeze ✦',b:'Prospective clinical evaluation complete. Algorithm frozen only after real-world performance confirmed',cs:'freeze'},
-    {t:'Usability & HE',b:'Usability testing. Health economics. SaMD classification confirmed'},
-    {t:'Clinical performance eval',b:'Clinical performance evaluation. Regulatory submission. Technical File. PMPF active'},
-    {t:'Launch & adoption',b:'Launch, adoption. Model drift monitoring. Reimbursement established'}]},
-  {id:'cat3',label:'Cat 3\nBiomarker +\nValidated Platform',sub:'IVD Assay Track',bg:'#DCEEE6',col:'#1B6B38',bdr:'#1B6B38',cells:[
-    {t:'Ideation & feasibility',b:'Analytical platform selection. Care pathway & health economic analysis'},
-    {t:'Platform performance',b:'Platform performance assessment. Biomarker signal confirmed on target platform'},
-    {t:'PoC in accredited lab',b:'PoC in patient matrix. ≥10 patient samples. LOD/LOQ, precision, matrix effects',cs:'reg-start'},
-    {t:'Analytical characterisation',b:'Full CLSI EP05/06/07/09 complete. Care pathway analysis. Method freeze planning'},
-    {t:'Method freeze ✦',b:'≥50 patients pilot study. Assay SOP, reagents & cut-offs locked',cs:'freeze'},
-    {t:'Clinical validation',b:'Prospective clinical validation (observational studies). DHF initiated'},
-    {t:'Usability & HE',b:'Usability testing. Health economics. Pre-submission meeting'},
-    {t:'Clinical performance eval',b:'Regulatory submission of IVD Technical File. NB/FDA review. Scientific validity + analytical + clinical performance data'},
-    {t:'Launch & adoption',b:'Test in clinical practice. PMCF + PF-UP active. Reimbursement established'}]},
-  {isRef:true,label:'Cat 3s\n+ Software',sub:'IVD Assay Track',bg:'#EAF6EF',col:'#1B6B38',ref:'As Category 3 above — IVD assay track identical. Runs in parallel with software track below. Convergence from TRL 5.'},
-  {id:'cat3s',label:'',sub:'IVD Software Track',bg:'#EAF6EF',col:'#1B6B38',bdr:'#1B6B38',cells:[
-    {t:'Ideation & feasibility',b:'Interpretive SW need defined. Algorithm concept. Literature identified'},
-    {t:'SW prototype',b:'SW prototype & architecture. Feature selection. I/O specification drafted'},
-    {t:'SW design & development',b:'SW design in regulated environment. Performance on independent test set (≥100/class)',cs:'reg-start'},
-    {t:'SW design & refinement',b:'Bias & fairness analysis. IEC 62304 plan. Input data spec locked ahead of assay freeze'},
-    {t:'SW V&V + algo freeze ✦',b:'Algorithm frozen using actual assay outputs (not surrogates). Convergence with assay track',cs:'conv'},
-    {t:'Clinical feasibility',b:'Prospective clinical validation. UI in workflow. Combined IVD + SW clinical utility assessed'},
-    {t:'Usability & HE',b:'Usability testing. HE analysis. IVD MDSW classification confirmed under IVDR'},
-    {t:'Clinical performance eval',b:'IVD MDSW Technical File (IVDR). CE/FDA for SW component. PCCP prepared'},
-    {t:'Launch & adoption',b:'Integrated IVD + SW in clinical practice. Model drift monitoring. Reimbursement'}]},
-  {id:'cat4',label:'Cat 4\nBiomarker +\nNovel Platform',sub:'IVD Assay Track',bg:'#FBF2D8',col:'#8B6400',bdr:'#B8860B',cells:[
-    {t:'Ideation & feasibility',b:'No validated platform exists. Novel platform identified. Detection principles under development'},
-    {t:'Platform performance',b:'Bench-scale prototype. Signal confirmed. Co-development with HW track begins'},
-    {t:'PoC on actual prototype HW',b:'PoC on actual prototype hardware. ≥10 patient samples. Co-dependent with HW track',cs:'reg-start'},
-    {t:'Analytical characterisation',b:'Full CLSI analytical validation on prototype/near-final hardware. Method freeze planning'},
-    {t:'Method freeze ✦',b:'≥50 patients on near-final hardware. Assay SOP & cut-offs locked',cs:'freeze'},
-    {t:'Joint clinical validation',b:'IVD assay + hardware assessed together on final production device. Convergence from TRL 6',cs:'conv'},
-    {t:'Usability & HE',b:'Usability testing. HE analysis. Joint IVDR + MDR pre-submission meeting'},
-    {t:'Integrated regulatory submission',b:'Clinical performance eval. Integrated regulatory submission (IVD + platform). NB/FDA review'},
-    {t:'Launch & adoption',b:'Integrated test (assay + platform) in clinical practice. PMCF active. Reimbursement'}]},
-  {id:'cat4_hw',label:'',sub:'Hardware Platform Track',bg:'#FBF2D8',col:'#8B6400',bdr:'#B8860B',cells:[
-    {t:'Ideation & feasibility',b:'Novel detection principle identified. No existing platform can replicate'},
-    {t:'HW platform prototype',b:'HW prototype design. Detection principle demonstrated in lab. Analytical concept validated'},
-    {t:'HW prototyping in matrix',b:'HW design, development, prototyping. Physical prototype in patient sample matrix',cs:'reg-start'},
-    {t:'Design freeze ✦',b:'Engineering performance vs specs. DHF initiated. Pre-pilot manufacturing run',cs:'freeze'},
-    {t:'Manufacturing V&V',b:'Manufacturing, V&V. Performance in representative conditions. DFM complete'},
-    {t:'Clinical use — post-freeze',b:'HW design freeze confirmed. Performance verified in clinical setting. Co-assessment with IVD assay',cs:'conv'},
-    {t:'Clinical investigation',b:'Clinical investigation with notified body. MDR pre-submission. Technical file substantially complete'},
-    {t:'MDR CE / FDA clearance',b:'CE mark under EU/UK MDR. FDA 510(k)/De Novo/PMA clearance. ISO 13485 mfg cert'},
-    {t:'Launch & adoption',b:'Device in routine clinical production use. PMCF active. Vigilance reporting'}]},
-  {isRef:true,label:'Cat 4s\n+ Software',sub:'IVD Assay Track',bg:'#FFF8E0',col:'#8B6400',ref:'As Category 4 above. Method freeze at TRL 5, dependent on hardware being sufficiently stable. Regulatory convergence from TRL 6.'},
-  {isRef:true,label:'',sub:'Hardware Platform Track',bg:'#FFF8E0',col:'#8B6400',ref:'As Category 4 above. Design freeze at TRL 4–5. Regulatory convergence from TRL 6.'},
-  {id:'cat4s',label:'',sub:'IVD Software Track',bg:'#FFF8E0',col:'#8B6400',bdr:'#B8860B',cells:[
-    {t:'Ideation & feasibility',b:'Interpretive SW need defined alongside novel platform + assay concept'},
-    {t:'SW prototype',b:'SW prototype & architecture. Feature selection. I/O specification drafted'},
-    {t:'SW design & development',b:'SW design in regulated environment. Independent test set (≥100/class)',cs:'reg-start'},
-    {t:'SW design & refinement',b:'Bias & fairness analysis. IEC 62304 plan. Input data spec locked, co-ordinated with HW freeze'},
-    {t:'SW V&V + algo freeze ✦',b:'Algorithm frozen using actual near-final hardware outputs. All three freezes must align',cs:'conv'},
-    {t:'Clinical feasibility',b:'Prospective clinical validation. Combined IVD + SW + platform utility assessed'},
-    {t:'Usability & HE',b:'Usability testing. HE analysis. IVD MDSW classification (IVDR). Joint pre-submission agreed'},
-    {t:'Clinical performance eval',b:'Clinical performance. Parallel IVDR + MDR + IVD MDSW submissions. Allow significantly extra time'},
-    {t:'Launch & adoption',b:'Full integrated system routinely used. Model monitoring. PMCF + PF-UP active'}]},
+/* ─── TRL Roadmap ─── */
+const RM=[
+  {id:'cat1',cl:'Cat 1\nMedical Device',tk:'Hardware Track',bg:'#DDEAF3',co:'#2D5A7B',bd:'#2D5A7B',cells:[
+    {t:'Ideation & feasibility',d:'Feasibility, care pathway & HE analysis'},
+    {t:'HW prototype',d:'Bench prototype, proof of concept, regulatory planning'},
+    {t:'HW design & prototyping',d:'PoC in regulated / accredited environment. ISO 13485 QMS must be established from this point',cs:'rstart'},
+    {t:'Design freeze \u2736',d:'Manufacturing V&V planning. DHF substantially complete. ISO 14971 risk file complete. ISO 13485 QMS operational',cs:'freeze'},
+    {t:'Manufacturing V&V',d:'Manufacturing, verification and validation. Design history file complete. Risk management file closed'},
+    {t:'PoC in clinical setting',d:'Proof-of-concept in appropriate clinical setting. Formative usability studies'},
+    {t:'Usability & HE',d:'Usability testing in real-world setting. Health economics analysis'},
+    {t:'Clinical performance eval',d:'Clinical performance evaluation (may be interventional trials). Regulatory submission, Technical File & pre-launch'},
+    {t:'Launch & adoption',d:'Launch, adoption, training, support, maintenance. Post-market surveillance active'}]},
+  {id:'cat1s',cl:'Cat 1s\nEmbedded SW',tk:'HW + Embedded SW Track',bg:'#E8F2FA',co:'#2D5A7B',bd:'#2D5A7B',cells:[
+    {t:'Clinical need & SW concept',d:'Clinical unmet need defined. Intended use of embedded SW identified. SW operates only within / dependent on specific hardware (device-bound, not SaMD)'},
+    {t:'SW safety classification',d:'IEC 62304 SW safety class determined (Class A/B/C). SW architecture concept & I/O specification drafted'},
+    {t:'SW integration & testing',d:'SW integrated into HW prototype. IEC 62304 development plan initiated. SW tested within device environment. Preliminary performance data',cs:'rstart'},
+    {t:'SW V&V planning',d:'SW verification & validation planning. SW requirements locked. IEC 62304 design phase initiated. SW-specific risk management (ISO 14971)'},
+    {t:'Joint HW+SW freeze \u2736',d:'SW V&V complete within device context. IEC 62304 design phase complete. SW design freeze is dependent on and co-ordinated with hardware design freeze',cs:'freeze'},
+    {t:'Integrated device testing',d:'SW performance verified in representative clinical conditions within device. Formative usability (human factors for SW-device interface)'},
+    {t:'Clinical eval incl. SW',d:'Clinical investigation covers embedded SW function. SW-specific MDR pre-submission. IEC 62304 technical documentation complete'},
+    {t:'Regulatory approval',d:'CE mark under EU/UK MDR inclusive of embedded SW. FDA clearance covers SW component. IEC 62304 documentation in Technical File'},
+    {t:'Deployment & SW maintenance',d:'Device with embedded SW in routine use. Post-market SW monitoring. SW update/change management process active per IEC 62304'}]},
+  {id:'cat2',cl:'Cat 2\nSaMD',tk:'Software Track',bg:'#EDE4F5',co:'#6B4C8A',bd:'#6B4C8A',cells:[
+    {t:'Ideation & feasibility',d:'Basic & applied research. Software feasibility analysis, care pathway and health economic analysis'},
+    {t:'SW prototype',d:'Software prototype discovery & design. Proof of concept. Regulatory planning'},
+    {t:'SW design & development',d:'Software design, development within regulated / accredited environment. IEC 62304 plan initiated',cs:'rstart'},
+    {t:'SW design lock & V&V planning',d:'SW V&V planning. Intended purpose & labelling draft finalised. Note: algorithm must NOT be frozen until after prospective clinical evaluation confirms performance'},
+    {t:'SW V&V',d:'SW V&V on retrospective/internal data. IEC 62304 design phase complete. Algorithm lock deferred until after prospective clinical evaluation (TRL 5\u20136 boundary)'},
+    {t:'Algorithm freeze \u2736',d:'Prospective clinical evaluation complete. Algorithm frozen in version control at this point (after real-world performance confirmed). Formative usability complete',cs:'freeze'},
+    {t:'Usability & HE',d:'Usability testing in real-world setting. Health economics analysis. SaMD classification confirmed. Pre-submission meeting held'},
+    {t:'Clinical performance eval',d:'Clinical performance evaluation. Regulatory submission of Technical File. Pre-launch, PMPF active. For AI/ML: Predetermined Change Control Plan (PCCP) prepared for post-market algorithm updates'},
+    {t:'Launch & adoption',d:'Launch, adoption, training, support. Model drift monitoring operational. Algorithm updates managed per approved PCCP. Reimbursement established'}]},
+  {id:'cat3',cl:'Cat 3\nBiomarker +\nValidated Platform',tk:'IVD Assay Track',bg:'#DCEEE6',co:'#1B6B38',bd:'#1B6B38',cells:[
+    {t:'Ideation & feasibility',d:'Analytical platform selection. Care pathway and health economic analysis'},
+    {t:'Platform performance',d:'Analytical platform performance assessment. Biomarker signal confirmed on target platform'},
+    {t:'PoC in accredited lab',d:'Proof-of-concept in accredited lab environment. \u226510 patient samples. LOD/LOQ, precision, matrix effects',cs:'rstart'},
+    {t:'Analytical characterisation',d:'Full CLSI analytical validation: EP05 (precision), EP06 (linearity), EP07 (interference), EP09 (method comparison). Care pathway analysis complete. Method freeze planning'},
+    {t:'Method freeze \u2736',d:'CLSI EP analytical validation complete. \u226550 patients for pilot clinical association. Assay SOP, reagents & cut-offs locked. Analytical performance confirmed before clinical validation begins',cs:'freeze'},
+    {t:'Clinical validation',d:'Prospective clinical validation (observational studies per ISO 20916). DHF initiated'},
+    {t:'Usability & HE',d:'Usability testing in real-world setting. Health economics analysis. Pre-submission meeting (MHRA/FDA)'},
+    {t:'Clinical performance eval',d:'Regulatory submission of IVD Technical File. Notified body audit / FDA review. Scientific validity + analytical performance data + clinical performance data'},
+    {t:'Launch & adoption',d:'Test available in clinical practice. Launch, adoption, training, support. PMCF plan active. Reimbursement established'}]},
+  {id:'cat3s',isRef:true,cl:'Cat 3s\nBiomarker +\nValidated Platform\n+ Software',tk:'IVD Assay Track',bg:'#EAF6EF',co:'#1B6B38',ref:'IVD Assay Track \u2014 as Category 3 above. Assay development runs in parallel with software track below. Convergence from TRL 5: assay freeze and SW input data lock must align.'},
+  {id:'cat3s',cl:null,tk:'IVD Software Track',bg:'#EAF6EF',co:'#1B6B38',bd:'#1B6B38',cells:[
+    {t:'Ideation & feasibility',d:'Interpretive SW need defined. Algorithm concept. Literature supporting approach identified'},
+    {t:'SW prototype',d:'Software prototype & architecture. Feature selection. I/O specification drafted'},
+    {t:'SW design & development',d:'Software design within regulated / accredited environment. Performance on independent test set (\u2265100/class)',cs:'rstart'},
+    {t:'SW design & refinement',d:'Bias & fairness analysis complete. IEC 62304 development plan initiated. Input data spec locked ahead of assay freeze'},
+    {t:'SW V&V + algorithm freeze \u2736',d:'SW V&V on assay outputs. Algorithm frozen using actual assay outputs (not surrogates) once assay freeze confirmed. Convergence with assay track from TRL 5',cs:'conv'},
+    {t:'Clinical feasibility',d:'Prospective clinical validation. Prototype UI integrated into workflow. Combined IVD + SW clinical utility assessed'},
+    {t:'Usability & HE',d:'Usability testing in real-world setting. Health economics analysis. SW classification confirmed: IVD MDSW under IVDR'},
+    {t:'Clinical performance eval',d:'Clinical performance evaluation. Regulatory submission of IVD Technical File. CE/FDA for SW component. For AI/ML: PCCP prepared'},
+    {t:'Launch & adoption',d:'Integrated test (assay + software) available in clinical practice. Model drift monitoring. Algorithm updates managed per PCCP. Reimbursement established'}]},
+  {id:'cat4',cl:'Cat 4\nBiomarker +\nNovel Platform',tk:'IVD Assay Track',bg:'#FBF2D8',co:'#8B6400',bd:'#B8860B',cells:[
+    {t:'Ideation & feasibility',d:'No validated platform exists. Novel platform identified & detection principles under development. Care pathway and health economic analysis'},
+    {t:'Platform performance',d:'Preliminary assay on bench-scale prototype hardware. Signal confirmed. Biomarker detectable on prototype. Co-development with HW track begins'},
+    {t:'PoC on actual prototype HW',d:'Proof-of-concept on actual prototype hardware (not surrogate). \u226510 patient samples. LOD/LOQ, precision, matrix effects. Technically co-dependent with HW track from this point',cs:'rstart'},
+    {t:'Analytical characterisation',d:'Full CLSI analytical validation (EP05/06/07/09) conducted on prototype/near-final hardware. Care pathway analysis. Method freeze planning'},
+    {t:'Method freeze \u2736',d:'CLSI validation complete on near-final hardware. \u226550 patients for pilot clinical association. Assay SOP, reagents & cut-offs locked. Analytical performance confirmed before clinical validation',cs:'freeze'},
+    {t:'Joint clinical validation',d:'IVD assay and hardware platform assessed together on final production device. Prospective clinical performance study. Convergence from TRL 6',cs:'conv'},
+    {t:'Usability & HE',d:'Usability testing in real-world setting. Health economics analysis. Joint IVDR + MDR pre-submission meeting'},
+    {t:'Integrated regulatory submission',d:'Clinical performance evaluation. Integrated regulatory submission (IVD + platform). Notified body audit / FDA review. Note: misaligned parallel submissions risk 6\u201312 month delays'},
+    {t:'Launch & adoption',d:'Integrated test (assay + platform) available in clinical practice. PMCF plan active. Reimbursement established'}]},
+  {id:'cat4',cl:null,tk:'Hardware Platform Track',bg:'#FBF2D8',co:'#8B6400',bd:'#B8860B',cells:[
+    {t:'Ideation & feasibility',d:'Novel detection principle identified. Confirmed no existing platform can replicate'},
+    {t:'HW platform prototype',d:'Hardware prototype discovery & design. Detection principle demonstrated in laboratory. Analytical concept validated'},
+    {t:'HW prototyping in matrix',d:'Hardware design, development, prototyping. Physical prototype tested in patient sample matrix. PoC in accredited environment',cs:'rstart'},
+    {t:'Design freeze \u2736',d:'Engineering performance characterised vs specs. DHF initiated. Pre-pilot manufacturing run. ISO 13485 QMS in development',cs:'freeze'},
+    {t:'Manufacturing V&V',d:'Manufacturing, verification and validation. Performance verified in representative conditions. DFM complete'},
+    {t:'Clinical use \u2014 post-freeze',d:'Hardware design freeze confirmed. Post-freeze performance verified in representative clinical setting. Co-assessment with IVD assay on final production hardware',cs:'conv'},
+    {t:'Clinical investigation',d:'Clinical investigation with notified body. MDR pre-submission strategy confirmed. Technical file substantially complete'},
+    {t:'MDR CE / FDA clearance',d:'CE mark under EU MDR 2017/745 or UK MDR 2002. FDA 510(k)/De Novo/PMA clearance. ISO 13485 manufacturing certification'},
+    {t:'Launch & adoption',d:'Device in routine clinical production use. PMCF plan active. Vigilance reporting. Reimbursement pathway established'}]},
+  {id:'cat4s',isRef:true,cl:'Cat 4s\nBiomarker +\nNovel Platform\n+ Software',tk:'IVD Assay Track',bg:'#FFF8E0',co:'#8B6400',ref:'IVD Assay Track \u2014 as Category 4 above. Method freeze at TRL 5, dependent on hardware being sufficiently stable. Regulatory convergence from TRL 6.'},
+  {id:'cat4s',isRef:true,cl:null,tk:'Hardware Platform Track',bg:'#FFF8E0',co:'#8B6400',ref:'Hardware Platform Track \u2014 as Category 4 above. Design freeze at TRL 4\u20135. Regulatory convergence from TRL 6.'},
+  {id:'cat4s',cl:null,tk:'IVD Software Track',bg:'#FFF8E0',co:'#8B6400',bd:'#B8860B',cells:[
+    {t:'Ideation & feasibility',d:'Interpretive SW need defined alongside novel platform + assay concept. Algorithm approach. Dataset access identified'},
+    {t:'SW prototype',d:'Software prototype & architecture. Feature selection. I/O specification. Algorithm concept'},
+    {t:'SW design & development',d:'Software design within regulated environment. Performance on independent test set (\u2265100/class)',cs:'rstart'},
+    {t:'SW design & refinement',d:'Bias & fairness analysis. IEC 62304 plan. Input data spec locked, co-ordinated with HW freeze'},
+    {t:'SW V&V + algorithm freeze \u2736',d:'Algorithm frozen using actual near-final hardware outputs. All three freezes (HW design, assay method, SW algorithm) must be co-ordinated',cs:'conv'},
+    {t:'Clinical feasibility',d:'Prospective clinical validation. Combined IVD + SW + platform clinical utility assessed jointly on final device'},
+    {t:'Usability & HE',d:'Usability testing. Health economics analysis. IVD MDSW classification confirmed under IVDR. Joint pre-submission strategy agreed'},
+    {t:'Clinical performance eval',d:'Clinical performance evaluation. Parallel IVDR + MDR + IVD MDSW submissions. Three-way regulatory package. For AI/ML: PCCP prepared. Allow significantly extra time'},
+    {t:'Launch & adoption',d:'Full integrated system routinely used. Model drift monitoring. PMCF + PF-UP active. Reimbursement established'}]},
 ];
-const PHASES = [
-  {label:'Discovery',cols:1,bg:'#5B9BD5'},
-  {label:'Translation, Regulation & Productisation',cols:4,bg:'#1C2B3A'},
-  {label:'Clinical & Regulatory',cols:3,bg:'#0E7C6E'},
-  {label:'Market & Adoption',cols:1,bg:'#085041'}
-];
-const THDRS = [
-  {n:'TRL 1',s:'Ideation'},{n:'TRL 2',s:'Technology concept'},{n:'TRL 3',s:'Proof of concept'},
-  {n:'TRL 4',s:'Lab validation'},{n:'TRL 5',s:'Prototype validation'},{n:'TRL 6',s:'Pilot validation'},
-  {n:'TRL 7',s:'Clinical validation'},{n:'TRL 8',s:'Regulatory submission'},{n:'TRL 9',s:'Market deployment'}
-];
-let rmBuilt = false;
-function buildRM() {
-  if (rmBuilt) return; rmBuilt = true;
-  const t = document.getElementById('rm-table');
-  let h = `<colgroup><col style="width:110px">`;
-  for (let i = 0; i < 9; i++) h += `<col style="width:90px">`;
-  h += `</colgroup><thead><tr><th></th>`;
-  PHASES.forEach(p => h += `<th colspan="${p.cols}" class="rm-th-phase" style="background:${p.bg}">${p.label}</th>`);
-  h += `</tr><tr><th></th>`;
-  THDRS.forEach(hd => h += `<th class="rm-th-trl">${hd.n}<span>${hd.s}</span></th>`);
-  h += `</tr></thead><tbody>`;
-  RM_DATA.forEach(r => {
-    if (r.isRef) {
-      h += `<tr class="rm-ref-row">`;
-      h += r.label ? `<td style="font-size:9.5px;font-weight:600;line-height:1.3;color:${r.col};background:${r.bg};padding:6px 8px;vertical-align:middle">${r.label.replace(/\n/g,'<br>')}</td>` : `<td style="font-size:9px;color:#777;padding:5px 8px;vertical-align:middle;font-style:italic">${r.sub}</td>`;
-      h += `<td colspan="9">${r.ref}</td></tr>`;
-      return;
+const PH=[{l:'Discovery',c:1,bg:'#5B9BD5'},{l:'Translation, Regulation & Productisation',c:4,bg:'#1C2B3A'},{l:'Clinical & Regulatory',c:3,bg:'#0E7C6E'},{l:'Market & Adoption',c:1,bg:'#085041'}];
+const TH=['TRL 1\nIdeation & concept','TRL 2\nTechnology concept','TRL 3\nProof of concept','TRL 4\nLab validation','TRL 5\nPrototype validation','TRL 6\nPilot validation','TRL 7\nClinical validation','TRL 8\nRegulatory submission','TRL 9\nMarket deployment'];
+
+let rmBuilt=false;
+function buildRM(){
+  if(rmBuilt)return;rmBuilt=true;
+  const t=document.getElementById('rm-tbl');
+  let h=`<colgroup><col style="width:90px"><col style="width:82px">`;
+  for(let i=0;i<9;i++)h+=`<col style="width:96px">`;
+  h+=`</colgroup><thead><tr>`;
+  h+=`<th class="catc" rowspan="2" style="top:0;z-index:12;border-bottom:1px solid var(--border);text-align:center;font-size:10px;color:var(--ts)">Category</th>`;
+  h+=`<th class="trkc" rowspan="2" style="top:0;z-index:12;border-bottom:1px solid var(--border);text-align:center;font-size:10px;color:var(--ts);font-weight:700">Track</th>`;
+  PH.forEach(p=>h+=`<th colspan="${p.c}" class="ph" style="background:${p.bg}">${p.l}</th>`);
+  h+=`</tr><tr>`;
+  TH.forEach(hd=>{const[n,s]=hd.split('\n');h+=`<th class="trlh">${n}<span>${s}</span></th>`;});
+  h+=`</tr></thead><tbody>`;
+  const done={};
+  RM.forEach(row=>{
+    if(row.isRef){
+      h+=`<tr class="rmref">`;
+      if(row.cl){const rs=RM.filter(r=>r.id===row.id).length;h+=`<td rowspan="${rs}" style="position:sticky;left:0;z-index:8;background:${row.bg};color:${row.co};font-weight:700;padding:6px 8px;vertical-align:middle;border-right:1px solid var(--border);border:1px solid ${row.co||'#ccc'};font-size:9.5px;line-height:1.3">${row.cl.replace(/\n/g,'<br>')}</td>`;}
+      h+=`<td style="position:sticky;left:90px;z-index:8;background:${row.bg};color:${row.co};font-size:8.5px;padding:4px 6px;vertical-align:middle;border-right:1px solid var(--border)">${row.tk}</td>`;
+      h+=`<td colspan="9">${row.ref}</td></tr>`;return;
     }
-    h += `<tr>`;
-    h += r.label ? `<td class="rm-row-label" style="background:${r.bg};color:${r.col};border:1px solid ${r.bdr}">${r.label.replace(/\n/g,'<br>')}<span style="display:block;font-weight:400;font-size:8.5px;margin-top:2px;opacity:.7">${r.sub}</span></td>` : `<td class="rm-row-label" style="background:${r.bg}99;color:${r.col}"><span style="font-weight:400;font-size:8.5px;opacity:.8">${r.sub}</span></td>`;
-    r.cells.forEach(c => h += `<td class="rm-cell${c.cs ? ' ' + c.cs : ''}"><b>${c.t}</b>${c.b}</td>`);
-    h += `</tr>`;
+    h+=`<tr>`;
+    if(row.cl&&!done[row.id]){done[row.id]=true;const rs=RM.filter(r=>r.id===row.id).length;h+=`<td class="catc" rowspan="${rs}" style="background:${row.bg};color:${row.co};border:1px solid ${row.bd}">${row.cl.replace(/\n/g,'<br>')}</td>`;}
+    h+=`<td class="trkc" style="background:${row.bg}99;color:${row.co}">${row.tk}</td>`;
+    row.cells.forEach(c=>h+=`<td class="rmc${c.cs?' '+c.cs:''}" data-cat="${row.id}"><div class="rmci"><span class="rmct">${c.t}</span><span class="rmcd">${c.d}</span></div></td>`);
+    h+=`</tr>`;
   });
-  h += `</tbody>`; t.innerHTML = h;
+  h+=`</tbody>`;t.innerHTML=h;
 }
 
-/* ══════════════════════════════════════════════════════════
-   CHECKLIST
-══════════════════════════════════════════════════════════ */
-const CAT_GROUPS = {
-  cat1:['all','hw'], cat1s:['all','hw','sw_emb'],
-  cat2:['all','sw'],
-  cat3:['all','ivd'], cat3s:['all','ivd','sw_ivd'],
-  cat4:['all','ivd','hw_novel'], cat4s:['all','ivd','hw_novel','sw_ivd'],
-};
-const CL_ALL = [
-  {trl:'Universal',title:'Context & background',groups:['all'],items:[
+/* ─── Checklist data ─── */
+const CG={cat1:['all','hw'],cat1s:['all','hw','sw_emb'],cat2:['all','sw'],cat3:['all','ivd'],cat3s:['all','ivd','sw_ivd'],cat4:['all','ivd','hw_novel'],cat4s:['all','ivd','hw_novel','sw_ivd']};
+const CL=[
+  {trl:'Universal',title:'Context & background',gr:['all'],items:[
     {t:'Has the clinical problem and target patient population been clearly documented?'},
     {t:'Is there a defined intended use / intended purpose statement?'},
     {t:'Has a care pathway analysis been completed?'},
@@ -669,7 +543,7 @@ const CL_ALL = [
     {t:'Has a preliminary competitive landscape assessment been done?'},
     {t:'Has the researcher provided a TRL self-assessment?'},
   ]},
-  {trl:'Universal',title:'IP & freedom to operate',groups:['all'],items:[
+  {trl:'Universal',title:'IP & freedom to operate',gr:['all'],items:[
     {t:'Is a patent application filed, or is one planned?',gate:true},
     {t:'Is the 12-month PCT window from the priority date still open?',gate:true},
     {t:'Has IP been discussed with the university TTO, and is the funder confirmed as funder of record?',gate:true},
@@ -678,7 +552,7 @@ const CL_ALL = [
     {t:'Are there existing licences, options, or industry agreements in place?'},
     {t:'Has freedom-to-operate (FTO) been considered for the intended commercial pathway?'},
   ]},
-  {trl:'Universal',title:'Data, samples & resources',groups:['all'],items:[
+  {trl:'Universal',title:'Data, samples & resources',gr:['all'],items:[
     {t:'Have patient samples or datasets been used in the work to date?'},
     {t:'Are the samples / data sourced from a biobank, clinical study, or prospective collection?'},
     {t:'Are the samples / data ethically consented for commercial use and sharing with industry?',gate:true},
@@ -688,7 +562,7 @@ const CL_ALL = [
     {t:'Is the analytical / computational infrastructure accessible to a commercial partner?'},
     {t:'Are material transfer agreements (MTAs) or data sharing agreements in place where needed?'},
   ]},
-  {trl:'Universal',title:'Team & collaboration',groups:['all'],items:[
+  {trl:'Universal',title:'Team & collaboration',gr:['all'],items:[
     {t:'Have named inventors and key researcher roles been documented?'},
     {t:'Is the PI / lead researcher willing to engage with commercial partners?'},
     {t:'Is a clinical collaborator involved in the programme?'},
@@ -696,7 +570,7 @@ const CL_ALL = [
     {t:'Has the researcher indicated a preference for spinout or out-licensing?'},
     {t:'Are there conflicts of interest, competing commitments, or planned departures to note?'},
   ]},
-  {trl:'TRL 1',gate:'The fundamental scientific principle must be demonstrated (not just hypothesised) and there must be a credible clinical rationale.',title:'All categories — general',groups:['all'],items:[
+  {trl:'TRL 1',gate:'The fundamental scientific principle must be demonstrated (not just hypothesised) and there must be a credible clinical rationale for the intended application.',title:'All categories \u2014 general',gr:['all'],items:[
     {t:'Is the underlying scientific principle established in peer-reviewed literature?',gate:true},
     {t:'Is there a clearly articulated clinical hypothesis linking the technology to a clinical decision?',gate:true},
     {t:'Has the technology concept been defined in enough detail to distinguish it from prior art?',gate:true},
@@ -704,35 +578,35 @@ const CL_ALL = [
     {t:'Has the clinical unmet need been validated with published evidence?'},
     {t:'Has a preliminary competitive landscape assessment been done?'},
   ]},
-  {trl:'TRL 1',title:'Cat 1 / 1s — Medical Device / Embedded SW',groups:['hw','sw_emb'],items:[
+  {trl:'TRL 1',title:'Cat 1 / 1s \u2014 Medical Device / Embedded SW',gr:['hw','sw_emb'],items:[
     {t:'Has the physical detection or measurement principle been demonstrated, even at basic level?',gate:true},
-    {t:'Is the device concept defined — what the device does and how?',gate:true},
+    {t:'Is the device concept defined \u2014 what the device does and how?',gate:true},
     {t:'Has the regulatory classification (MDR class) been considered?'},
     {t:'For Cat 1s: Has the role of the embedded software within the device been defined?'},
   ]},
-  {trl:'TRL 1',title:'Cat 2 — SaMD',groups:['sw'],items:[
+  {trl:'TRL 1',title:'Cat 2 \u2014 SaMD',gr:['sw'],items:[
     {t:'Has a clinical signal been demonstrated in data, even from a small retrospective dataset?',gate:true},
-    {t:'Is the algorithm concept defined — input data, output, and clinical decision supported?',gate:true},
+    {t:'Is the algorithm concept defined \u2014 input data, output, and clinical decision supported?',gate:true},
     {t:'Is access to a suitable training dataset confirmed, or is there a realistic path to one?',gate:true},
     {t:'Has the IMDRF SaMD risk category been considered?'},
   ]},
-  {trl:'TRL 1',title:'Cat 3 / 3s / 4 / 4s — Biomarker & IVD categories',groups:['ivd','hw_novel','sw_ivd'],items:[
-    {t:'Is the biomarker–disease association supported by at least one peer-reviewed publication?',gate:true},
+  {trl:'TRL 1',title:'Cat 3 / 3s / 4 / 4s \u2014 Biomarker & IVD categories',gr:['ivd','hw_novel','sw_ivd'],items:[
+    {t:'Is the biomarker\u2013disease association supported by at least one peer-reviewed publication?',gate:true},
     {t:'Is the biomarker measurable in a clinically accessible sample type (blood, urine, tissue)?',gate:true},
     {t:'Have a target analyte, biological matrix, and measurement modality been defined?',gate:true},
-    {t:'Is there published biological plausibility — a mechanism linking the biomarker to disease?'},
+    {t:'Is there published biological plausibility \u2014 a mechanism linking the biomarker to disease?'},
     {t:'Has the clinical context of use been defined (screening, diagnosis, monitoring, companion Dx)?'},
-    {t:'For Cat 3/3s: Has the existing validated platform been identified?'},
+    {t:'For Cat 3/3s: Has the existing validated platform been identified (PCR, NGS, mass spec, ELISA etc.)?'},
     {t:'For Cat 4/4s: Has it been confirmed that no existing platform can measure this biomarker?'},
   ]},
-  {trl:'TRL 2',gate:'A practical technology concept must have been demonstrated in laboratory conditions — not just theorised.',title:'All categories — general',groups:['all'],items:[
-    {t:'Has the technology concept been reduced to practice — not just described in a paper?',gate:true},
+  {trl:'TRL 2',gate:'A practical technology concept must have been demonstrated in laboratory conditions \u2014 not just theorised. There should be a working prototype, model, or software build, however early-stage.',title:'All categories \u2014 general',gr:['all'],items:[
+    {t:'Has the technology concept been reduced to practice \u2014 not just described in a paper?',gate:true},
     {t:'Is there a working prototype, model, or software build, however early-stage?',gate:true},
     {t:'Has the applicable regulatory pathway been identified?'},
     {t:'Has a preliminary target product profile (TPP) been drafted?'},
-    {t:'Is development for the next 12–18 months planned and funded?'},
+    {t:'Is development for the next 12\u201318 months planned and funded?'},
   ]},
-  {trl:'TRL 2',title:'Cat 1 / 1s — Medical Device / Embedded SW',groups:['hw','sw_emb'],items:[
+  {trl:'TRL 2',title:'Cat 1 / 1s \u2014 Medical Device / Embedded SW',gr:['hw','sw_emb'],items:[
     {t:'Has the core detection or measurement principle been demonstrated on a bench prototype?',gate:true},
     {t:'Have preliminary materials and components been identified?',gate:true},
     {t:'Has a preliminary engineering concept been validated, even informally?'},
@@ -741,89 +615,101 @@ const CL_ALL = [
     {t:'Has the team identified when ISO 13485 QMS needs to be established?'},
     {t:'For Cat 1s: Has the IEC 62304 software safety class (A/B/C) been determined?',gate:true},
   ]},
-  {trl:'TRL 2',title:'Cat 2 — SaMD',groups:['sw'],items:[
-    {t:'Has a prototype algorithm been built and tested on retrospective data?',gate:true},
-    {t:'Does preliminary performance suggest a clinically meaningful signal?',gate:true},
+  {trl:'TRL 2',title:'Cat 2 \u2014 SaMD',gr:['sw'],items:[
+    {t:'Has a prototype algorithm or model been built and tested on retrospective data?',gate:true},
+    {t:'Does preliminary performance on retrospective data suggest a clinically meaningful signal?',gate:true},
     {t:'Has the software architecture and input/output specification been defined?',gate:true},
     {t:'Has IEC 62304 software lifecycle planning been initiated?'},
     {t:'Has the dataset been characterised (size, source, demographic coverage, label quality)?'},
     {t:'Has a bias analysis been planned or initiated?'},
   ]},
-  {trl:'TRL 2',title:'Cat 3 / 3s — Biomarker + Validated Platform',groups:['ivd'],items:[
+  {trl:'TRL 2',title:'Cat 3 / 3s \u2014 Biomarker + Validated Platform',gr:['ivd'],items:[
     {t:'Has the biomarker been detected in spiked or cell-line samples on the target platform?',gate:true},
     {t:'Has the analytical platform been confirmed (PCR, NGS, mass spec, ELISA etc.)?',gate:true},
     {t:'Has a preliminary assay chemistry / reagent system been identified?'},
+    {t:'Has the analytical signal been confirmed on the target instrument?'},
     {t:'For Cat 3s: Has the algorithm concept been defined (inputs, outputs, clinical purpose)?'},
     {t:'For Cat 3s: Has a suitable training dataset been identified and access confirmed?'},
   ]},
-  {trl:'TRL 2',title:'Cat 4 / 4s — Novel Platform',groups:['hw_novel'],items:[
+  {trl:'TRL 2',title:'Cat 4 / 4s \u2014 Novel Platform',gr:['hw_novel'],items:[
     {t:'Has a preliminary bench-scale prototype of the novel platform been built?',gate:true},
     {t:'Has the target analyte been detected on the bench prototype, even at crude level?',gate:true},
     {t:'Has the detection mechanism been validated conceptually?',gate:true},
-    {t:'Has preliminary signal-to-noise / selectivity been assessed?'},
+    {t:'Has preliminary signal-to-noise / selectivity been assessed on the bench prototype?'},
+    {t:'Has sample matrix compatibility been considered?'},
     {t:'For Cat 4s: Have the algorithm concept and dataset access been confirmed?'},
   ]},
-  {trl:'TRL 3',gate:'TRL 3 marks the start of regulated activity. Work must be conducted within a quality management framework from this point.',title:'All categories — regulatory onset',groups:['all'],items:[
-    {t:'Has an ISO 13485 QMS been established, or is there a confirmed plan and timeline?',gate:true},
+  {trl:'TRL 3',gate:'TRL 3 marks the start of regulated activity. Work must be conducted within a quality management framework from this point.',title:'All categories \u2014 regulatory onset',gr:['all'],items:[
+    {t:'Has an ISO 13485 QMS been established, or is there a confirmed plan and timeline to do so?',gate:true},
     {t:'Has ISO 14971 risk management been initiated with a formal risk management plan?',gate:true},
     {t:'Has work been conducted in, or transferred to, a regulated / accredited environment?',gate:true},
-    {t:'Has the regulatory pathway been confirmed (regulation, classification, conformity assessment route)?'},
+    {t:'Has the regulatory pathway been confirmed (applicable regulation, classification, conformity assessment route)?'},
     {t:'Has a pre-submission meeting with MHRA / FDA been considered or planned?'},
     {t:'Have regulatory consultants / CROs been engaged?'},
   ]},
-  {trl:'TRL 3',title:'Cat 1 / 1s — Medical Device / Embedded SW',groups:['hw','sw_emb'],items:[
+  {trl:'TRL 3',title:'Cat 1 / 1s \u2014 Medical Device / Embedded SW',gr:['hw','sw_emb'],items:[
     {t:'Has a functional physical prototype been built and demonstrated in controlled conditions?',gate:true},
     {t:'Has proof-of-concept been demonstrated in the target environment, not just on the bench?',gate:true},
     {t:'Have preliminary biocompatibility tests been initiated (ISO 10993)?'},
     {t:'Has an expert usability review / early human factors study been conducted?'},
+    {t:'Has performance been characterised against preliminary design specifications?'},
     {t:'For Cat 1s: Has the IEC 62304 development plan been formally initiated?',gate:true},
     {t:'For Cat 1s: Has the software been tested within the device environment, not standalone?',gate:true},
   ]},
-  {trl:'TRL 3',title:'Cat 2 — SaMD',groups:['sw'],items:[
+  {trl:'TRL 3',title:'Cat 2 \u2014 SaMD',gr:['sw'],items:[
     {t:'Has the algorithm been tested on a held-out independent test set (not training data)?',gate:true},
     {t:'Is the independent test set at least 100 samples per class from a real clinical source?',gate:true},
     {t:'Has a bias and fairness analysis been completed across age, sex, and ethnicity?',gate:true},
+    {t:'Has the IEC 62304 software development plan been formally initiated?'},
     {t:'Is the input data confirmed as real clinical data (not synthetic or surrogate)?'},
     {t:'Have sensitivity, specificity, PPV, and NPV been calculated on the independent test set?'},
+    {t:'Has a prototype user interface been developed, even low-fidelity?'},
   ]},
-  {trl:'TRL 3',title:'Cat 3 / 3s — Biomarker + Validated Platform',groups:['ivd'],items:[
+  {trl:'TRL 3',title:'Cat 3 / 3s \u2014 Biomarker + Validated Platform',gr:['ivd'],items:[
     {t:'Has proof-of-concept been demonstrated in the target patient sample matrix?',gate:true},
     {t:'Has the assay been tested on at least 10 patient samples at clinically relevant concentrations?',gate:true},
     {t:'Has platform / instrument compatibility been confirmed?',gate:true},
     {t:'Have preliminary LOD/LOQ been determined?'},
     {t:'Have preliminary precision / reproducibility data been generated?'},
     {t:'Have matrix effects been considered?'},
-    {t:'For Cat 3s: Has algorithm performance on an independent test set (≥100/class) been assessed?'},
+    {t:'For Cat 3s: Has algorithm performance on an independent test set (\u2265100/class) been assessed?'},
+    {t:'For Cat 3s: Has a bias and fairness analysis been completed?'},
   ]},
-  {trl:'TRL 3',title:'Cat 4 / 4s — Novel Platform',groups:['hw_novel'],items:[
+  {trl:'TRL 3',title:'Cat 4 / 4s \u2014 Novel Platform',gr:['hw_novel'],items:[
     {t:'Has the physical prototype been tested in patient sample matrix, not just buffer?',gate:true},
     {t:'Has proof-of-concept been demonstrated in an accredited / regulated lab environment?',gate:true},
-    {t:'Has assay proof-of-concept been conducted on actual prototype hardware — not a surrogate?',gate:true},
+    {t:'Has preliminary biocompatibility been assessed (ISO 10993) where applicable?'},
     {t:'Have precision and reproducibility on the prototype been assessed?'},
     {t:'Has sample matrix compatibility been established?'},
+    {t:'Has assay proof-of-concept been conducted on actual prototype hardware \u2014 not a surrogate platform?',gate:true},
+    {t:'For Cat 4s: Have the Cat 3s algorithm questions above been addressed?'},
   ]},
-  {trl:'TRL 4',gate:'TRL 4 is the analytical validation phase. For hardware tracks, design freeze is the key milestone. For software tracks, the algorithm must NOT be frozen at TRL 4.',title:'All categories — analytical performance',groups:['all'],items:[
+  {trl:'TRL 4',gate:'TRL 4 is the analytical validation phase. For hardware tracks, design freeze is the key milestone. For IVD assay tracks, full CLSI characterisation should be underway or complete. For software tracks, the algorithm must NOT be frozen at TRL 4.',title:'All categories \u2014 analytical performance',gr:['all'],items:[
     {t:'Has full analytical characterisation been completed for the primary measurement?',gate:true},
     {t:'Is there reproducibility data across multiple operators, instruments, or sites?'},
     {t:'Has a care pathway analysis been completed?',gate:true},
+    {t:'Has a design history file (DHF) been initiated and is it being maintained?'},
     {t:'Is the ISO 13485 QMS operational and covering design and development activities?',gate:true},
     {t:'Has the ISO 14971 risk management file been substantially developed?'},
   ]},
-  {trl:'TRL 4',title:'Cat 1 / 1s — Medical Device / Embedded SW',groups:['hw','sw_emb'],items:[
+  {trl:'TRL 4',title:'Cat 1 / 1s \u2014 Medical Device / Embedded SW',gr:['hw','sw_emb'],items:[
     {t:'Has engineering performance been characterised against design specifications?',gate:true},
     {t:'Has the DHF been substantially completed?',gate:true},
+    {t:'Is a manufacturing V&V plan in place?'},
     {t:'Has a design freeze been achieved, or is a clear timeline defined?',gate:true},
-    {t:'For Cat 1s: Have software requirements been locked and IEC 62304 design phase initiated?',gate:true},
+    {t:'Is ISO 13485 QMS established and operational?'},
+    {t:'For Cat 1s: Have software requirements been locked and IEC 62304 design phase been initiated?',gate:true},
     {t:'For Cat 1s: Is the software design freeze co-ordinated with the hardware design freeze?'},
   ]},
-  {trl:'TRL 4',title:'Cat 2 — SaMD',groups:['sw'],items:[
+  {trl:'TRL 4',title:'Cat 2 \u2014 SaMD',gr:['sw'],items:[
     {t:'Has software design been substantially completed and requirements locked?',gate:true},
     {t:'Is the IEC 62304 development plan in place and being followed?',gate:true},
-    {t:'Is the algorithm still unlocked — not frozen until after prospective clinical evaluation?'},
+    {t:'Is the algorithm still unlocked \u2014 not frozen until after prospective clinical evaluation?'},
     {t:'Has an intended purpose and labelling draft been prepared?'},
     {t:'Has a bias and fairness analysis been completed on the expanded dataset?'},
+    {t:'For Cat 3s/4s SW: Has the input data specification been locked ahead of the assay method freeze?',gate:true},
   ]},
-  {trl:'TRL 4',title:'Cat 3 / 3s — Biomarker + Validated Platform',groups:['ivd'],items:[
+  {trl:'TRL 4',title:'Cat 3 / 3s \u2014 Biomarker + Validated Platform',gr:['ivd'],items:[
     {t:'Has full CLSI analytical validation been completed: EP05 (precision), EP06 (linearity), EP07 (interference), EP09 (method comparison)?',gate:true},
     {t:'Has a preliminary cut-off value been defined?'},
     {t:'Have reproducibility data been generated across runs, operators, and instruments?'},
@@ -831,50 +717,56 @@ const CL_ALL = [
     {t:'Has a pilot clinical study been planned (target matrix, sample size, sites, endpoints)?'},
     {t:'For Cat 3s: Has the software input data specification been locked ahead of the assay method freeze?',gate:true},
   ]},
-  {trl:'TRL 4',title:'Cat 4 / 4s — Novel Platform + Assay',groups:['hw_novel'],items:[
-    {t:'For HW track: Has engineering performance been characterised against specifications?',gate:true},
+  {trl:'TRL 4',title:'Cat 4 / 4s \u2014 Novel Platform + Assay',gr:['hw_novel'],items:[
+    {t:'For HW track: Has engineering performance been characterised against specifications on the prototype?',gate:true},
     {t:'For HW track: Has a design freeze been achieved, or is a clear timeline confirmed?',gate:true},
-    {t:'For IVD assay: Has full CLSI analytical validation been conducted on actual prototype hardware?',gate:true},
-    {t:'Has CLSI validation been performed on actual platform hardware — not a surrogate?'},
+    {t:'For IVD assay track: Has full CLSI analytical validation been conducted on actual prototype hardware?',gate:true},
+    {t:'Has CLSI validation been performed on actual platform hardware \u2014 not a surrogate?'},
+    {t:'Has a pre-pilot manufacturing run been completed?'},
+    {t:'Is ISO 13485 QMS in development with a confirmed certification timeline?'},
     {t:'For Cat 4s SW: Has the software input data specification been locked, co-ordinated with the hardware freeze?',gate:true},
   ]},
-  {trl:'TRL 5',gate:'TRL 5 is the major value inflection point — the last stage before clinical validation begins. This is typically the earliest point at which meaningful partnering conversations can begin.',title:'All categories — clinical relevance',groups:['all'],items:[
+  {trl:'TRL 5',gate:'TRL 5 is the major value inflection point \u2014 the last stage before clinical validation begins. This is typically the earliest point at which meaningful partnering conversations can begin.',title:'All categories \u2014 clinical relevance',gr:['all'],items:[
     {t:'Has the technology been tested in a clinically relevant setting or on representative patient material?',gate:true},
-    {t:'Has the primary track freeze point been achieved or is it on a defined timeline?',gate:true},
-    {t:'Has a pre-submission meeting with MHRA / FDA been planned or completed?'},
+    {t:'Is there a pre-submission meeting with MHRA / FDA planned or completed?'},
+    {t:'Has a regulatory strategy document been prepared?'},
     {t:'Has a health economics analysis been commissioned or completed?'},
     {t:'Has a target product profile (TPP) been finalised and reviewed by a clinical expert?'},
+    {t:'Has the primary track freeze point been achieved or is it on a defined timeline?',gate:true},
   ]},
-  {trl:'TRL 5',title:'Cat 1 / 1s — Medical Device',groups:['hw','sw_emb'],items:[
+  {trl:'TRL 5',title:'Cat 1 / 1s \u2014 Medical Device',gr:['hw','sw_emb'],items:[
     {t:'Has simulated-use performance been verified in representative conditions?',gate:true},
     {t:'Has manufacturing V&V been initiated?',gate:true},
     {t:'Has a design for manufacture (DFM) assessment been completed?'},
     {t:'Have formative usability engineering studies been completed?'},
+    {t:'Has the design history file been completed?'},
     {t:'For Cat 1s: Has the joint hardware + embedded SW design freeze been achieved?',gate:true},
     {t:'For Cat 1s: Has IEC 62304 design phase been completed and SW risk management file closed?',gate:true},
   ]},
-  {trl:'TRL 5',title:'Cat 2 — SaMD',groups:['sw'],items:[
+  {trl:'TRL 5',title:'Cat 2 \u2014 SaMD',gr:['sw'],items:[
     {t:'Has the algorithm been evaluated on prospective clinical data?',gate:true},
-    {t:'Has the algorithm been frozen only after prospective clinical evaluation confirmed performance?',gate:true},
+    {t:'Has prospective clinical evaluation confirmed performance, and only then has the algorithm been frozen?',gate:true},
     {t:'Has IEC 62304 design phase been completed?'},
     {t:'Has the software risk management file (ISO 14971) been closed?'},
     {t:'Has a SaMD / MDSW risk classification been confirmed with MHRA or FDA?'},
+    {t:'Has a prototype UI been integrated into a clinical workflow, even in a pilot setting?'},
     {t:'For AI/ML: Has a Predetermined Change Control Plan (PCCP) been considered?'},
   ]},
-  {trl:'TRL 5',title:'Cat 3 / 3s — Biomarker + Validated Platform',groups:['ivd'],items:[
-    {t:'Has method freeze been achieved — SOP, reagents, and cut-offs locked?',gate:true},
+  {trl:'TRL 5',title:'Cat 3 / 3s \u2014 Biomarker + Validated Platform',gr:['ivd'],items:[
+    {t:'Has method freeze been achieved \u2014 SOP, reagents, and cut-offs locked?',gate:true},
     {t:'Has a pilot clinical study been completed with at least 50 patient samples and an appropriate clinical comparator?',gate:true},
     {t:'Is a clinical association demonstrated with ROC/AUC data available?',gate:true},
     {t:'Has the pilot study been conducted in a representative patient population?'},
     {t:'Has a prospective clinical performance study been planned and resourced?'},
     {t:'Has a pre-submission meeting with MHRA / FDA been planned?'},
-    {t:'For Cat 3s: Has the SW algorithm been frozen using actual assay outputs — not surrogate data?',gate:true},
+    {t:'For Cat 3s: Has the SW algorithm been frozen using actual assay outputs \u2014 not surrogate data?',gate:true},
     {t:'For Cat 3s: Have combined IVD + SW clinical utility data been generated?',gate:true},
   ]},
-  {trl:'TRL 5',title:'Cat 4 / 4s — Novel Platform',groups:['hw_novel'],items:[
+  {trl:'TRL 5',title:'Cat 4 / 4s \u2014 Novel Platform',gr:['hw_novel'],items:[
     {t:'For HW track: Has manufacturing V&V been initiated?',gate:true},
     {t:'For HW track: Has performance been verified in representative conditions?',gate:true},
-    {t:'For IVD assay: Has method freeze been achieved on near-final or production hardware?',gate:true},
+    {t:'For HW track: Has a DFM assessment been completed?'},
+    {t:'For IVD assay track: Has method freeze been achieved on near-final or production hardware?',gate:true},
     {t:'Has a pilot clinical study of at least 50 patients been completed on near-final hardware?',gate:true},
     {t:'For Cat 4s SW: Has the algorithm been frozen using actual near-final hardware outputs?',gate:true},
     {t:'Have all three freezes (HW design, assay method, SW algorithm) been co-ordinated?'},
@@ -882,109 +774,135 @@ const CL_ALL = [
   ]},
 ];
 
-let selCat = '', cbState = {};
-function catFilterChange(val) {
-  selCat = val;
-  if (!val) { document.getElementById('cl-main').style.display='none'; document.getElementById('cl-placeholder').style.display='block'; return; }
-  document.getElementById('cl-placeholder').style.display = 'none';
-  document.getElementById('cl-main').style.display = 'block';
-  const cat = CATS[val];
-  if (cat) {
-    const b = document.getElementById('cl-cat-banner');
-    b.style.background = cat.bg; b.style.color = cat.color; b.style.borderLeft = `3px solid ${cat.border}`;
-    b.textContent = cat.label + ' — ' + cat.reg;
-  }
-  cbState = {}; renderCL(val);
+let selCat='',cbState={};
+function catChange(val){
+  selCat=val;
+  if(!val){document.getElementById('cl-main').style.display='none';document.getElementById('cl-placeholder').style.display='block';return;}
+  document.getElementById('cl-placeholder').style.display='none';
+  document.getElementById('cl-main').style.display='block';
+  document.getElementById('cl-result').style.display='none';
+  const cat=CATS[val];
+  if(cat){const b=document.getElementById('cl-banner');b.style.background=cat.bg;b.style.color=cat.color;b.style.borderLeft='3px solid '+cat.border;b.textContent=cat.label+' \u2014 '+cat.reg;}
+  cbState={};renderCL();
 }
-function isVis(sec) { const g = CAT_GROUPS[selCat]||[]; return sec.groups.some(x => g.includes(x)); }
-function renderCL(cat) {
-  const cont = document.getElementById('cl-qs');
-  let curTRL = '', html = '';
-  CL_ALL.forEach((sec, si) => {
-    if (!isVis(sec)) return;
-    if (sec.trl !== curTRL) {
-      curTRL = sec.trl;
-      const gateText = sec.gate || '';
-      html += `<div style="font-size:13px;font-weight:600;color:var(--navy);padding:.55rem 0 .2rem;margin-top:${curTRL==='Universal'?0:'.5rem'};border-top:${curTRL==='Universal'?'none':'1.5px solid var(--border)'}">
-        ${curTRL}${gateText ? `<span class="cl-trl-badge">${gateText}</span>` : ''}</div>`;
-    }
-    html += `<div class="cl-section"><div class="cl-sec-h">${sec.title}</div>`;
-    sec.items.forEach((item, ii) => {
-      const id = `cb_${si}_${ii}`;
-      const chk = cbState[id] ? ' checked' : '';
-      html += `<div class="cl-item"><input type="checkbox" class="cl-cb" id="${id}"${chk} onchange="cbChg('${id}')"><label for="${id}" class="cl-label${item.gate?' gate':''}">${item.t}${item.gate?'<span class="gate-pill">⚑ gating</span>':''}</label></div>`;
+function isVis(sec){const g=CG[selCat]||[];return sec.gr.some(x=>g.includes(x));}
+function renderCL(){
+  const cont=document.getElementById('cl-qs');let curTRL='',html='';
+  CL.forEach((sec,si)=>{
+    if(!isVis(sec))return;
+    if(sec.trl!==curTRL){curTRL=sec.trl;html+=`<div class="cltrlh">${curTRL}${sec.gate?`<span class="cltrlg">\u26D1 ${sec.gate}</span>`:''}</div>`;}
+    html+=`<div class="clsec"><div class="clsech">${sec.title}</div>`;
+    sec.items.forEach((item,ii)=>{
+      const id=`cb_${si}_${ii}`;const chk=cbState[id]?' checked':'';
+      html+=`<div class="clitem"><input type="checkbox" class="clcb" id="${id}"${chk} onchange="cbChg('${id}')"><label for="${id}" class="cllbl${item.gate?' gate':''}">${item.t}${item.gate?'<span class="gp">\u26D1 gating</span>':''}</label></div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   });
-  cont.innerHTML = html; updateProg();
+  cont.innerHTML=html;updateProg();
 }
-function cbChg(id) { cbState[id] = document.getElementById(id).checked; updateProg(); }
-function updateProg() {
-  const all = document.querySelectorAll('input.cl-cb');
-  const chk = document.querySelectorAll('input.cl-cb:checked');
-  const pct = all.length ? Math.round(chk.length/all.length*100) : 0;
-  document.getElementById('cl-prog-fill').style.width = pct + '%';
-  document.getElementById('cl-prog-text').textContent = `${chk.length} of ${all.length} questions answered (${pct}%)`;
+function cbChg(id){cbState[id]=document.getElementById(id).checked;updateProg();}
+function updateProg(){
+  const all=document.querySelectorAll('input.clcb');const chk=document.querySelectorAll('input.clcb:checked');
+  const pct=all.length?Math.round(chk.length/all.length*100):0;
+  document.getElementById('cl-pfill').style.width=pct+'%';
+  document.getElementById('cl-plbl').textContent=chk.length+' of '+all.length+' questions answered ('+pct+'%)';
 }
-function downloadPDF() {
-  if (!document.getElementById('ft-cat').value) { alert('Please select a technology category before downloading.'); return; }
-  const btn = document.getElementById('dl-btn');
-  btn.textContent = 'Generating...'; btn.disabled = true;
-  const style = document.createElement('style');
-  style.id = 'pdf-override';
-  style.textContent = '.site-header,.dl-row,.page-header p,.prog-track,.prog-label{display:none!important}.page-inner{padding:8px!important}.cl-scope-note{margin-bottom:8px!important}';
+
+function runAssessment(){
+  const trls=['TRL 1','TRL 2','TRL 3','TRL 4','TRL 5'];
+  let confirmed=0;const gaps={};
+  trls.forEach((trl,ti)=>{
+    const secs=CL.filter(s=>s.trl===trl&&isVis(s));let pass=true;const g=[];
+    secs.forEach((sec,si)=>{
+      const gsi=CL.indexOf(sec);
+      sec.items.forEach((item,ii)=>{if(item.gate&&!cbState[`cb_${gsi}_${ii}`]){pass=false;g.push(item.t);}});
+    });
+    gaps[trl]=g;if(pass&&g.length===0)confirmed=ti+1;
+  });
+
+  const label=confirmed>0?'TRL '+confirmed:'Below TRL 1';
+  const descs=['The technology has not yet met the criteria for TRL 1. The fundamental scientific principles need to be established.','Basic principles have been observed. The scientific concept is established but not yet demonstrated in practice.','A practical technology concept has been demonstrated in laboratory conditions.','Proof-of-concept has been achieved in a relevant environment. Regulated activity has now begun.','Analytical characterisation is underway or complete. Approaching the primary track freeze point.','Major value inflection point reached. Technology validated in a clinically relevant setting. This is typically the earliest point at which meaningful partnering conversations can begin.'];
+  const partnerNotes=['Not yet ready for commercial partnering conversations.','Too early for partnering \u2014 scientific basis needs further development.','Awareness conversations only, with very early-stage investors or partners. No analytical or clinical evidence yet.','Exploratory discussions possible with specialist partners who have a high risk appetite. Analytical performance data available.','Structured partnering conversations can begin. TRL 5 is the minimum most partners require for formal evaluation. Freeze achieved, pilot clinical data available, regulatory pathway confirmed.'];
+
+  const immGaps=gaps[trls[confirmed]]||[];
+  const nextGaps=gaps[trls[confirmed+1]]||[];
+  const steps=[];
+  if(immGaps.length)steps.push('Address blocking gating questions above before progressing');
+  if(confirmed<3)steps.push('Initiate ISO 13485 QMS planning \u2014 required from TRL 3 onward when regulated activity begins');
+  if(confirmed<3)steps.push('Confirm the applicable regulatory pathway, classification and conformity assessment route');
+  if(confirmed>=3&&confirmed<5)steps.push('Plan a pre-submission meeting with MHRA / FDA to align on regulatory strategy');
+  if(confirmed>=4)steps.push('Prepare a target product profile (TPP) and commission a health economics analysis');
+  if(confirmed>=4)steps.push('Begin planning and resourcing the clinical validation study');
+  if(confirmed>=5)steps.push('Initiate formal partnering discussions \u2014 technology is at the minimum stage most partners require');
+
+  let html=`<div class="trlrow"><div class="trlbadge">${label}</div><div class="trldesc">${descs[confirmed]||''}</div></div>`;
+  html+=`<div class="assec"><div class="assch">Partnering readiness</div><div style="font-size:12.5px;color:var(--ts);padding:4px 0">${partnerNotes[confirmed]||''}</div></div>`;
+  if(immGaps.length){
+    html+=`<div class="assec"><div class="assch" style="color:#8B1515">&#9888; Blocking gaps \u2014 unanswered gating questions at ${label}</div>`;
+    immGaps.forEach(g=>{html+=`<div class="gitem"><span class="gp2 bl">Blocking</span>${g}</div>`;});
+    html+=`</div>`;
+  }
+  if(nextGaps.length){
+    const nt=trls[confirmed]||'TRL 5+';
+    html+=`<div class="assec"><div class="assch">Priority next steps \u2014 to reach ${nt}</div>`;
+    nextGaps.slice(0,8).forEach(g=>{html+=`<div class="gitem"><span class="gp2 nx">Next TRL</span>${g}</div>`;});
+    html+=`</div>`;
+  }
+  if(steps.length){
+    html+=`<div class="assec"><div class="assch">Recommended actions</div>`;
+    steps.forEach((s,i)=>{html+=`<div class="nsitem"><div class="nsnum">${i+1}</div><div>${s}</div></div>`;});
+    html+=`</div>`;
+  }
+  document.getElementById('cl-rc').innerHTML=html;
+  document.getElementById('cl-result').style.display='block';
+  document.getElementById('cl-result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function downloadPDF(){
+  const btn=document.getElementById('dl-btn');
+  btn.textContent='Generating...';btn.disabled=true;
+  const name=(document.getElementById('ft-ref').value||document.getElementById('ft-name').value||'TRL_Assessment').replace(/[\s\/\\]/g,'_');
+  const style=document.createElement('style');style.id='pdf-hide';
+  style.textContent='.snav,.clgbar,.ptrack,.plbl,.abtn,.clscope{display:none!important}.inner{padding:6px!important}input,textarea,select{border:none!important;padding:0!important;height:auto!important}';
   document.head.appendChild(style);
-  const el = document.getElementById('page-cl');
-  const fname = (document.getElementById('ft-ref').value || document.getElementById('ft-name').value || 'TRL_Assessment').replace(/[\s\/]/g,'_');
   html2pdf().set({
-    margin:[8,8,8,8],
-    filename: fname + '.pdf',
+    margin:[8,8,8,8],filename:name+'.pdf',
     image:{type:'jpeg',quality:.97},
     html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff'},
     jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
-  }).from(el).save().then(() => {
-    document.getElementById('pdf-override').remove();
-    btn.innerHTML = '⬇ Download PDF'; btn.disabled = false;
+  }).from(document.getElementById('pg-cl')).save().then(()=>{
+    document.getElementById('pdf-hide').remove();
+    btn.innerHTML='&#8659; Download PDF summary';btn.disabled=false;
   });
 }
 
-/* ══════════════════════════════════════════════════════════
-   DEFINITIONS
-══════════════════════════════════════════════════════════ */
-const DEFS = [
-  {term:'Medical Device (Category 1)',cat:'cat1',body:'A physical hardware device intended for clinical use — from a blood collection tube to a surgically implantable device. The physical hardware is the primary regulated entity.',reg:'MDR 2017/745 / UK MDR 2002'},
-  {term:'Embedded Medical Device Software (Category 1s)',cat:'cat1s',body:'Software that operates only within / dependent on a specific hardware device. Device-bound — not standalone SaMD. An integral part of the regulated device.',reg:'MDR 2017/745 + IEC 62304'},
-  {term:'Software as a Medical Device — SaMD (Category 2)',cat:'cat2',body:'Standalone software intended to directly inform clinical diagnosis, prognosis, or treatment decisions without requiring specific hardware.',reg:'MDSW / SaMD pathway'},
-  {term:'Biomarker + Validated Platform (Category 3)',cat:'cat3',body:'A novel biomarker or analyte measurable using an existing validated analytical platform (PCR, NGS, mass spec, ELISA etc.). No new hardware needs to be developed.',reg:'IVD pathway — IVDR / FDA 510k'},
-  {term:'Biomarker + Validated Platform + Software (Category 3s)',cat:'cat3s',body:'As Category 3, but requiring algorithmic or computational interpretation beyond the standard instrument output.',reg:'IVD + SaMD dual pathway'},
-  {term:'Biomarker + Novel Platform (Category 4)',cat:'cat4',body:'A novel biomarker where no existing validated platform can perform the measurement — entirely new analytical hardware must be developed alongside the assay. The two tracks are technically co-dependent from the outset.',reg:'IVDR + MDR (parallel submissions)'},
-  {term:'Biomarker + Novel Platform + Software (Category 4s)',cat:'cat4s',body:'As Category 4, but also requiring algorithmic interpretation. The most complex regulatory package: parallel IVDR, MDR, and MDSW submissions. Allow significantly extra time.',reg:'IVDR + MDR + MDSW (all parallel)'},
+/* ─── Definitions ─── */
+const DEFS=[
+  {term:'Medical Device (Category 1)',cat:'cat1',body:'A physical hardware device intended for clinical use \u2014 from a blood collection tube to a surgically implantable device. The physical hardware is the primary regulated entity.',reg:'MDR 2017/745 / UK MDR 2002'},
+  {term:'Embedded Medical Device Software (Category 1s)',cat:'cat1s',body:'Software that operates only within / dependent on a specific hardware device. Device-bound \u2014 not standalone SaMD. An integral part of the regulated device, not a separate product.',reg:'MDR 2017/745 + IEC 62304'},
+  {term:'Software as a Medical Device \u2014 SaMD (Category 2)',cat:'cat2',body:'Standalone software intended to directly inform clinical diagnosis, prognosis, or treatment decisions without requiring specific hardware.',reg:'MDSW / SaMD pathway'},
+  {term:'Biomarker + Validated Platform (Category 3)',cat:'cat3',body:'A novel biomarker or analyte measurable using an existing validated analytical platform (PCR, NGS, mass spec, ELISA etc.). No new hardware needs to be developed.',reg:'IVD pathway \u2014 IVDR / FDA 510k'},
+  {term:'Biomarker + Validated Platform + Software (Category 3s)',cat:'cat3s',body:'As Category 3, but requiring algorithmic or computational interpretation beyond the standard instrument output. A classifier or algorithm must be applied to produce a clinical result.',reg:'IVD + SaMD dual pathway'},
+  {term:'Biomarker + Novel Platform (Category 4)',cat:'cat4',body:'A novel biomarker where no existing validated platform can perform the measurement \u2014 entirely new analytical hardware must be developed alongside the assay. The two tracks are technically co-dependent from the outset.',reg:'IVDR + MDR (parallel submissions)'},
+  {term:'Biomarker + Novel Platform + Software (Category 4s)',cat:'cat4s',body:'As Category 4, but also requiring algorithmic interpretation. The most complex regulatory package: parallel IVDR (IVD assay), MDR (novel hardware), and MDSW (interpretive software). Allow significantly extra time.',reg:'IVDR + MDR + MDSW (all parallel)'},
   {term:'IVD (In vitro diagnostic)',body:'A medical device intended for examination of specimens from the human body to provide clinical information. Regulated under IVDR in the EU and 510k/PMA/De Novo in the US.'},
   {term:'SaMD (Software as a Medical Device)',body:'Software intended for one or more medical purposes that performs these purposes without being part of a hardware medical device (IMDRF definition).'},
   {term:'MDSW (Medical Device Software)',body:'EU regulatory term covering all software meeting the definition of a medical device, including both SaMD and embedded software.'},
   {term:'TRL (Technology Readiness Level)',body:'A scale from 1 to 9 assessing technology maturity. TRL 1 = basic principles observed; TRL 9 = system proven in operational environment.'},
-  {term:'IEC 62304',body:'International standard for medical device software lifecycle processes. Applies to both SaMD and embedded software. Safety class (A/B/C) determines documentation depth — Class C requires the most rigorous documentation.'},
+  {term:'IEC 62304',body:'International standard for medical device software lifecycle processes. Applies to both SaMD and embedded software. Safety class (A/B/C) determines documentation depth \u2014 Class C requires the most rigorous documentation.'},
   {term:'ISO 13485',body:'Quality management system standard for medical device manufacturers. Must be established from TRL 3 onward when regulated activity begins. Required before CE marking or FDA clearance.'},
   {term:'ISO 14971',body:'Standard for application of risk management to medical devices. Should be initiated from TRL 3; risk management file must be substantially complete before clinical evaluation begins.'},
   {term:'IVDR (EU In Vitro Diagnostic Regulation)',body:'EU Regulation 2017/746. Significantly increased clinical evidence requirements for IVD devices. Most manufacturers now require a notified body. Applies to Categories 3, 3s, 4, and 4s.'},
   {term:'CLSI (Clinical and Laboratory Standards Institute)',body:'Develops standards for clinical laboratory testing. Key IVD analytical validation standards: EP05 (precision), EP06 (linearity), EP07 (interference), EP09 (method comparison). Must be completed before method freeze.'},
-  {term:'Method freeze (IVD)',body:'Point at which the assay SOP, reagents, and analytical cut-offs are locked — no further changes without re-validation. Must occur before clinical validation can meaningfully begin. Typically TRL 5 for Categories 3 and 4.'},
-  {term:'Design freeze (hardware)',body:'Point at which all hardware components, materials, and processes are locked. Must be completed before manufacturing V&V. Typically TRL 4–5 for Categories 1 and 4.'},
-  {term:'PCCP (Predetermined Change Control Plan)',body:'FDA mechanism allowing AI/ML-enabled SaMD manufacturers to specify in advance what algorithm updates can be made post-clearance without a new submission.'},
+  {term:'Method freeze (IVD)',body:'Point at which the assay SOP, reagents, and analytical cut-offs are locked \u2014 no further changes without re-validation. Must occur before clinical validation can meaningfully begin. Typically TRL 5 for Categories 3 and 4.'},
+  {term:'Design freeze (hardware)',body:'Point at which all hardware components, materials, and processes are locked. Must be completed before manufacturing V&V. Typically TRL 4\u20135 for Categories 1 and 4.'},
+  {term:'PCCP (Predetermined Change Control Plan)',body:'FDA mechanism allowing AI/ML-enabled SaMD manufacturers to specify in advance what algorithm updates can be made post-clearance without a new submission. Increasingly expected for AI/ML diagnostic algorithms.'},
 ];
-function buildDefs() {
-  const list = document.getElementById('def-list');
-  if (list.children.length) return;
-  list.innerHTML = DEFS.map(d => {
-    const cat = d.cat ? CATS[d.cat] : null;
-    return `<div class="def-item">
-      <div class="def-term" style="${cat?`color:${cat.color}`:'color:var(--navy)'}">
-        ${d.term}
-        ${cat ? `<span class="def-cat-tag" style="background:${cat.bg};color:${cat.color};border:1px solid ${cat.border}44">${d.cat.toUpperCase()}</span>` : ''}
-      </div>
-      <div class="def-body">${d.body}</div>
-      ${d.reg ? `<div class="def-reg">Regulatory pathway: ${d.reg}</div>` : ''}
-    </div>`;
+function buildDefs(){
+  const list=document.getElementById('def-list');if(list.children.length)return;
+  list.innerHTML=DEFS.map(d=>{
+    const cat=d.cat?CATS[d.cat]:null;
+    return `<div class="defitem"><div class="dterm" style="${cat?'color:'+cat.color:'color:var(--navy)'}">${d.term}${cat?`<span class="dctag" style="background:${cat.bg};color:${cat.color};border:1px solid ${cat.border}44">${d.cat.toUpperCase()}</span>`:''}</div><div class="dbody">${d.body}</div>${d.reg?`<div class="dreg">Regulatory pathway: ${d.reg}</div>`:''}</div>`;
   }).join('');
 }
 </script>
